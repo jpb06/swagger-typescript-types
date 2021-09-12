@@ -1,0 +1,580 @@
+{
+  "openapi": "3.0.0",
+  "paths": {
+    "/authentication/login": {
+      "post": {
+        "operationId": "AuthenticationController_login",
+        "summary": "Login route",
+        "description": "Authenticates a user from his google auth token",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "description": "The user credentials",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginBodyDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Authentication succeeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginResultDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing, invalid or expired token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseDto"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Users"
+        ]
+      }
+    },
+    "/logged-user/chapters": {
+      "get": {
+        "operationId": "LoggedUserController_getChaptersWithMembers",
+        "summary": "Logged user's chapters",
+        "description": "Gets the chapters the logged user belongs to",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "The list of chapters, along with their members",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ChaptersWithMembersResultDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing, invalid or expired token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseDto"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Logged users"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/logged-user/subjects": {
+      "get": {
+        "operationId": "LoggedUserController_getSubjects",
+        "summary": "Logged user's subjects",
+        "description": "Gets the subjects this user has access to",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "The list of subjects",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SubjectsResultDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing, invalid or expired token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseDto"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Logged users"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/chapter/{id}/subjects": {
+      "get": {
+        "operationId": "ChapterController_getChaptersSubjects",
+        "summary": "Chapter's subjects",
+        "description": "Gets the chapter's subjects",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The list of subjects",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SubjectsResultDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing, invalid or expired token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseDto"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Chapters"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
+    "/subject": {
+      "post": {
+        "operationId": "SubjectController_createSubject",
+        "summary": "Create a subject",
+        "description": "Crates a new subject in a chapter",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NewSubjectDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The created subject",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateSubjectResultDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing, invalid or expired token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseDto"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Chapters"
+        ],
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    }
+  },
+  "info": {
+    "title": "Backend sandbox",
+    "description": "The backend sandbox description",
+    "version": "1.0",
+    "contact": {}
+  },
+  "tags": [],
+  "servers": [],
+  "components": {
+    "securitySchemes": {
+      "bearer": {
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "type": "http"
+      }
+    },
+    "schemas": {
+      "LoginBodyDto": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "token"
+        ]
+      },
+      "LoginResultDataDto": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "token"
+        ]
+      },
+      "LoginResultDto": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/LoginResultDataDto"
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "ApiResponseDto": {
+        "type": "object",
+        "properties": {
+          "statusCode": {
+            "type": "number"
+          },
+          "message": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "statusCode",
+          "message"
+        ]
+      },
+      "ChapterMemberDto": {
+        "type": "object",
+        "properties": {
+          "idUser": {
+            "type": "number"
+          },
+          "userFullName": {
+            "type": "string"
+          },
+          "userEmail": {
+            "type": "string"
+          },
+          "userPictureUrl": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "idUser",
+          "userFullName",
+          "userEmail",
+          "userPictureUrl"
+        ]
+      },
+      "ChapterWithMembersDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "name": {
+            "type": "string"
+          },
+          "members": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ChapterMemberDto"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "members"
+        ]
+      },
+      "ChaptersWithMembersResultDto": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ChapterWithMembersDto"
+            }
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "DiscussionDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "idUser": {
+            "type": "number"
+          },
+          "userFullName": {
+            "type": "string"
+          },
+          "userEmail": {
+            "type": "string"
+          },
+          "comment": {
+            "type": "string"
+          },
+          "link": {
+            "type": "string"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "idUser",
+          "userFullName",
+          "userEmail",
+          "comment",
+          "link",
+          "createdAt"
+        ]
+      },
+      "SubjectWithDiscussionsDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "title": {
+            "type": "string"
+          },
+          "details": {
+            "type": "string"
+          },
+          "link": {
+            "type": "string"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "closedAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "answer": {
+            "type": "string"
+          },
+          "chapterId": {
+            "type": "number"
+          },
+          "chapterName": {
+            "type": "string"
+          },
+          "discussion": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DiscussionDto"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "details",
+          "link",
+          "createdAt",
+          "closedAt",
+          "answer",
+          "chapterId",
+          "chapterName",
+          "discussion"
+        ]
+      },
+      "SubjectsResultDto": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SubjectWithDiscussionsDto"
+            }
+          }
+        },
+        "required": [
+          "data"
+        ]
+      },
+      "NewSubjectDto": {
+        "type": "object",
+        "properties": {
+          "idChapter": {
+            "type": "number"
+          },
+          "title": {
+            "type": "string"
+          },
+          "details": {
+            "type": "string"
+          },
+          "link": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "idChapter",
+          "title",
+          "details",
+          "link"
+        ]
+      },
+      "SubjectDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "title": {
+            "type": "string"
+          },
+          "details": {
+            "type": "string"
+          },
+          "link": {
+            "type": "string"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "closedAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "answer": {
+            "type": "string"
+          },
+          "chapterId": {
+            "type": "number"
+          },
+          "chapterName": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "details",
+          "link",
+          "createdAt",
+          "closedAt",
+          "answer",
+          "chapterId",
+          "chapterName"
+        ]
+      },
+      "CreateSubjectResultDto": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/SubjectDto"
+          }
+        },
+        "required": [
+          "data"
+        ]
+      }
+    }
+  }
+}
