@@ -2,6 +2,10 @@
 
 [![Open in Visual Studio Code](https://open.vscode.dev/badges/open-in-vscode.svg)](https://open.vscode.dev/jpb06/swagger-typescript-types)
 ![Coverage](./badges/coverage-global%20coverage.svg)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=jpb06_swagger-typescript-types&metric=coverage)](https://sonarcloud.io/dashboard?id=jpb06_swagger-typescript-types)
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=jpb06_swagger-typescript-types&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=jpb06_swagger-typescript-types)
+[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=jpb06_swagger-typescript-types&metric=reliability_rating)](https://sonarcloud.io/dashboard?id=jpb06_swagger-typescript-types)
+[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=jpb06_swagger-typescript-types&metric=code_smells)](https://sonarcloud.io/dashboard?id=jpb06_swagger-typescript-types)
 ![Github workflow](https://img.shields.io/github/workflow/status/jpb06/swagger-typescript-types/checks?label=last%20workflow&logo=github-actions)
 ![Last commit](https://img.shields.io/github/last-commit/jpb06/swagger-typescript-types?logo=git)
 
