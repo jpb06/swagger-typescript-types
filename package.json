@@ -1,0 +1,52 @@
+{
+  "name": "swagger-typescript-types",
+  "description": "Generating typescript artifacts from a swagger json file",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/jpb06/swagger-typescript-types.git",
+  "author": "jpb06 <jp.bois.06@outlook.fr>",
+  "license": "MIT",
+  "bin": {
+    "generateTypesFromUrl": "./cli/generate-types-from-url.cli.js"
+  },
+  "dependencies": {
+    "@apidevtools/openapi-schemas": "^2.1.0",
+    "ajv": "^8.6.2",
+    "ajv-draft-04": "^1.0.0",
+    "axios": "^0.21.4",
+    "chalk": "^4.1.2",
+    "fs-extra": "^10.0.0"
+  },
+  "devDependencies": {
+    "@ts-morph/bootstrap": "^0.11.0",
+    "@types/ajv": "^1.0.0",
+    "@types/axios": "^0.14.0",
+    "@types/fs-extra": "^9.0.12",
+    "@types/jest": "^27.0.1",
+    "@types/node": "^16.7.1",
+    "@typescript-eslint/eslint-plugin": "^4.29.3",
+    "@typescript-eslint/parser": "^4.29.3",
+    "copyfiles": "^2.4.1",
+    "del-cli": "^4.0.1",
+    "eslint": "^7.32.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-import": "^2.24.1",
+    "eslint-plugin-prettier": "^4.0.0",
+    "jest": "^27.0.6",
+    "prettier": "^2.3.2",
+    "ts-jest": "^27.0.5",
+    "typescript": "^4.3.5"
+  },
+  "scripts": {
+    "copy-package": "copyfiles package.json ./dist/",
+    "copy-readme": "copyfiles README.md ./dist/",
+    "build": "del-cli ./dist && tsc --project tsconfig.prod.json",
+    "postbuild": "yarn copy-package && yarn copy-readme",
+    "test": "jest ---watch",
+    "test:dev": "jest --coverage --watchAll",
+    "test:silentcov": "jest --coverage --silent --runInBand --watchAll=false",
+    "test:ci": "jest --runInBand --ci",
+    "lint": "eslint ./src",
+    "cli": "node ./dist/cli/generate-types-from-url.cli.js"
+  }
+}
