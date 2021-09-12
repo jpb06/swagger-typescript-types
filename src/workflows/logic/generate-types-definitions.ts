@@ -24,7 +24,7 @@ export const generateTypesDefinitions = async (
               items.$ref,
             )}>;\n`;
           } else if ($ref) {
-            typesDefinition += `${prop}: ${getSchemaName($ref as string)};\n`;
+            typesDefinition += `${prop}: ${getSchemaName($ref)};\n`;
           } else {
             typesDefinition += `${prop}: ${type};\n`;
           }
