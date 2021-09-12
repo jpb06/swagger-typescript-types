@@ -1,7 +1,8 @@
+import { getProcessArguments } from './process-argv.indirection';
 import { urlRegex } from './url-regex';
 
 export const validateArguments = () => {
-  const args = process.argv.slice(2);
+  const args = getProcessArguments();
   if (args.length !== 2) {
     throw new Error('Expecting two arguments');
   }
