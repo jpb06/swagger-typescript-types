@@ -15,20 +15,28 @@ interface ApiOperation {
   operationId: string;
   summary: string;
   description: string;
-  parameters: Array<unknown>;
-  requestBody: ApiRequestBody;
+  parameters: Array<ApiRouteParameter>;
+  requestBody: ApiContent & { required: boolean };
   responses: {
-    [key: string]: ApiResponseDetails;
+    [key: string]: ApiContent & { description: string };
   };
 }
 
-interface ApiRequestBody {
+export interface ApiRouteParameter {
+  name: string;
   required: boolean;
-  content: ApiResponseDetails;
+  in: 'path';
+  schema: {
+    $ref?: string;
+    type?: string;
+    items?: {
+      $ref?: string;
+      type?: string;
+    };
+  };
 }
 
-export interface ApiResponseDetails {
-  description: string;
+export interface ApiContent {
   content: {
     'application/json': {
       schema: {
@@ -52,6 +60,7 @@ export interface ApiSchemas {
         $ref?: string;
         items?: {
           $ref: string;
+          type?: string;
         };
       };
     };
