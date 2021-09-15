@@ -1,16 +1,21 @@
 #!/usr/bin/env node
 
+import { validateArguments } from '../logic/cli/args/validate-arguments';
+import {
+  reportError,
+  reportSuccess,
+} from '../logic/cli/console/console.messages';
 import { generateTypesFromUrl } from '../workflows/generate-types-from-url';
-import { reportError, reportSuccess } from './logic/console.messages';
-import { validateArguments } from './logic/validate-arguments';
 
 /* istanbul ignore file */
 
 (async () => {
   try {
-    const { sourceUrl, outPath } = validateArguments();
-    await generateTypesFromUrl(sourceUrl, outPath);
-    reportSuccess(outPath);
+    const args = validateArguments();
+
+    await generateTypesFromUrl(args);
+
+    reportSuccess(args.outPath);
     process.exit(0);
   } catch (err) {
     reportError(err);
