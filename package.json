@@ -45,7 +45,7 @@
     "test": "jest ---watch",
     "test:dev": "jest --coverage --watchAll",
     "test:silentcov": "jest --coverage --silent --runInBand --watchAll=false",
-    "test:ci": "jest --runInBand --ci",
+    "test:ci": "jest --ci --coverage",
     "lint": "eslint ./src",
     "cli": "node ./dist/cli/generate-types-from-url.cli.js"
   }
