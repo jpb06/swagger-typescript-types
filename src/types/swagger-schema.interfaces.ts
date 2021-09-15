@@ -5,22 +5,6 @@ export interface ApiJson {
   };
 }
 
-interface ApiSchemas {
-  [key: string]: {
-    type: string;
-    properties: {
-      [key: string]: {
-        type?: string;
-        $ref?: string;
-        items?: {
-          $ref: string;
-        };
-      };
-    };
-    required: Array<string>;
-  };
-}
-
 type Verbs = 'get' | 'post' | 'put' | 'delete';
 
 type ApiPath = {
@@ -28,6 +12,9 @@ type ApiPath = {
 };
 
 interface ApiOperation {
+  operationId: string;
+  summary: string;
+  description: string;
   parameters: Array<unknown>;
   requestBody: ApiRequestBody;
   responses: {
@@ -40,13 +27,34 @@ interface ApiRequestBody {
   content: ApiResponseDetails;
 }
 
-interface ApiResponseDetails {
+export interface ApiResponseDetails {
   description: string;
   content: {
     'application/json': {
       schema: {
-        $ref: string;
+        $ref?: string;
+        type?: string;
+        items?: {
+          $ref?: string;
+          type?: string;
+        };
       };
     };
+  };
+}
+
+export interface ApiSchemas {
+  [key: string]: {
+    type: string;
+    properties: {
+      [key: string]: {
+        type?: string;
+        $ref?: string;
+        items?: {
+          $ref: string;
+        };
+      };
+    };
+    required: Array<string>;
   };
 }
