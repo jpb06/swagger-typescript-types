@@ -11,9 +11,19 @@ import { generateTypesDefinitions } from './generate-types-definitions';
 jest.mock('fs-extra');
 jest.mock('child_process');
 
-const expectWriteFileCallToContain = (index: number, regex: RegExp) => {
+const expectWriteFileCallToContain = (index: number, regex: RegExp): void => {
   const rawResult = mocked(writeFile).mock.calls[index][1];
   expect(regex.test(rawResult)).toBe(true);
+};
+
+const expectWriteFileCallToMatchTimes = (
+  index: number,
+  regex: RegExp,
+  count: number,
+): void => {
+  const rawResult = mocked(writeFile).mock.calls[index][1];
+  const arr = (rawResult as string).match(regex) || [];
+  expect(arr).toHaveLength(count);
 };
 
 describe('generateTypesDefinitions function', () => {
@@ -22,7 +32,7 @@ describe('generateTypesDefinitions function', () => {
   beforeEach(() => jest.clearAllMocks());
 
   it('should generate all the types', async () => {
-    await generateTypesDefinitions(json, 'out', false, false);
+    await generateTypesDefinitions('API_URL', json, 'out', false, false);
 
     expect(writeFile).toHaveBeenCalledTimes(6);
     const rawResult = mocked(writeFile).mock.calls[5][1];
@@ -118,11 +128,12 @@ describe('generateTypesDefinitions function', () => {
   });
 
   it('should export one path variable by exposed endpoint', async () => {
-    await generateTypesDefinitions(json, 'out', false, false);
+    await generateTypesDefinitions('API_URL', json, 'out', false, false);
 
     expect(writeFile).toHaveBeenCalledTimes(6);
 
-    const pathExportRegex = /export const path = '.*';/;
+    const pathExportRegex =
+      /(export const path = `\${process\.env\.API_URL}.*`;)|(export const getPath = (.*) => `\${process\.env\.API_URL}.*`;)/;
     expectWriteFileCallToContain(0, pathExportRegex);
     expectWriteFileCallToContain(1, pathExportRegex);
     expectWriteFileCallToContain(2, pathExportRegex);
@@ -130,13 +141,12 @@ describe('generateTypesDefinitions function', () => {
     expectWriteFileCallToContain(4, pathExportRegex);
   });
 
-  it('should re export related types for each exposed endpoint', async () => {
-    await generateTypesDefinitions(json, 'out', false, false);
+  it('should import related types for each exposed endpoint', async () => {
+    await generateTypesDefinitions('API_URL', json, 'out', false, false);
 
     expect(writeFile).toHaveBeenCalledTimes(6);
 
-    const reExportingRegex =
-      /import { .* } from '.\/..\/..\/api-types';\n\n\s*export type { .* };/;
+    const reExportingRegex = /import { .* } from '.\/..\/api-types';\n\n/;
     expectWriteFileCallToContain(0, reExportingRegex);
     expectWriteFileCallToContain(1, reExportingRegex);
     expectWriteFileCallToContain(2, reExportingRegex);
@@ -144,8 +154,44 @@ describe('generateTypesDefinitions function', () => {
     expectWriteFileCallToContain(4, reExportingRegex);
   });
 
+  it('should generate jsdoc for each endpoint', async () => {
+    await generateTypesDefinitions('API_URL', json, 'out', false, false);
+
+    expect(writeFile).toHaveBeenCalledTimes(6);
+
+    const jsDocRegex =
+      /\/\*\* .*\n.*\* verb: .*\n.*\* summary: .*\n.*\* description: .*\n.*\n\n/;
+    expectWriteFileCallToContain(0, jsDocRegex);
+    expectWriteFileCallToContain(1, jsDocRegex);
+    expectWriteFileCallToContain(2, jsDocRegex);
+    expectWriteFileCallToContain(3, jsDocRegex);
+    expectWriteFileCallToContain(4, jsDocRegex);
+  });
+
+  it('should export on type by response', async () => {
+    await generateTypesDefinitions('API_URL', json, 'out', false, false);
+
+    expect(writeFile).toHaveBeenCalledTimes(6);
+
+    const exportsRegex = /(.*export type Response[0-9]{3} = .*;)/g;
+    expectWriteFileCallToMatchTimes(0, exportsRegex, 3);
+    expectWriteFileCallToMatchTimes(1, exportsRegex, 3);
+    expectWriteFileCallToMatchTimes(2, exportsRegex, 3);
+    expectWriteFileCallToMatchTimes(3, exportsRegex, 3);
+    expectWriteFileCallToMatchTimes(4, exportsRegex, 3);
+  });
+
+  it('should export the request body type if any', async () => {
+    await generateTypesDefinitions('API_URL', json, 'out', false, false);
+
+    expect(writeFile).toHaveBeenCalledTimes(6);
+
+    const requestBodyExportsRegex = /export type RequestBody = .*\n/;
+    expectWriteFileCallToContain(0, requestBodyExportsRegex);
+  });
+
   it('should generate valid typescript for types', async () => {
-    await generateTypesDefinitions(json, 'out', false, false);
+    await generateTypesDefinitions('API_URL', json, 'out', false, false);
 
     expect(writeFile).toHaveBeenCalledTimes(6);
     const rawResult = mocked(writeFile).mock.calls[5][1];
@@ -154,25 +200,25 @@ describe('generateTypesDefinitions function', () => {
   });
 
   it('should not clear output path', async () => {
-    await generateTypesDefinitions(json, 'out', false, false);
+    await generateTypesDefinitions('API_URL', json, 'out', false, false);
 
     expect(remove).toHaveBeenCalledTimes(0);
   });
 
   it('should clear output path', async () => {
-    await generateTypesDefinitions(json, 'out', true, false);
+    await generateTypesDefinitions('API_URL', json, 'out', true, false);
 
     expect(remove).toHaveBeenCalledTimes(1);
   });
 
   it('should not use the linter', async () => {
-    await generateTypesDefinitions(json, 'out', false, false);
+    await generateTypesDefinitions('API_URL', json, 'out', false, false);
 
     expect(execSync).toHaveBeenCalledTimes(0);
   });
 
   it('should use the linter to format files', async () => {
-    await generateTypesDefinitions(json, 'out', false, true);
+    await generateTypesDefinitions('API_URL', json, 'out', false, true);
 
     expect(execSync).toHaveBeenCalledTimes(1);
   });
