@@ -15,12 +15,14 @@
     "ajv-draft-04": "^1.0.0",
     "axios": "^0.21.4",
     "chalk": "^4.1.2",
+    "dotenv": "^10.0.0",
     "fs-extra": "^10.0.0"
   },
   "devDependencies": {
     "@ts-morph/bootstrap": "^0.11.0",
     "@types/ajv": "^1.0.0",
     "@types/axios": "^0.14.0",
+    "@types/dotenv": "^8.2.0",
     "@types/fs-extra": "^9.0.12",
     "@types/jest": "^27.0.1",
     "@types/node": "^16.7.1",

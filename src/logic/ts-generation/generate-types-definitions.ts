@@ -14,11 +14,12 @@ import { getRouteModels } from './get-route-models';
 import { getRouteOutputsExports } from './get-route-outputs-exports';
 
 export const generateTypesDefinitions = async (
+  envVarName: string,
   json: ApiJson,
   outPath: string,
   shouldClearOutPath: boolean,
   shouldCallEslint: boolean,
-) => {
+): Promise<void> => {
   if (shouldClearOutPath) {
     await remove(outPath);
   }
@@ -42,7 +43,7 @@ export const generateTypesDefinitions = async (
     await ensureDir(controllerPath);
 
     const models = getRouteModels(responses, parameters, bodyModel);
-    const routePath = getRoutePath(rawPath, parameters);
+    const routePath = getRoutePath(envVarName, rawPath, parameters);
     const inputsExports = getRouteInputsExports(bodyModel);
     const outputExports = getRouteOutputsExports(responses);
     const doc = getJsDoc(id, verb, summary, description);

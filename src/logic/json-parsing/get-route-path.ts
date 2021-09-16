@@ -2,12 +2,14 @@ import { ApiRouteParameter } from '../../types/swagger-schema.interfaces';
 import { getSchemaName } from './get-schema-name';
 
 export const getRoutePath = (
+  envVarName: string,
   rawPath: string,
   parameters: Array<ApiRouteParameter>,
-) => {
+): string => {
+  const root = '${process.env.' + envVarName + '}';
   const pathParameters = parameters.filter((el) => el.in === 'path');
   if (pathParameters.length === 0) {
-    return `export const path = '${rawPath}';`;
+    return `export const path = \`${root}${rawPath}\`;`;
   }
 
   const functionParameters = pathParameters.reduce<Array<string>>(
@@ -34,5 +36,5 @@ export const getRoutePath = (
 
   return `export const getPath = (${functionParameters.join(
     ', ',
-  )}): string => \`${rawPath.replace('{', '${')}\`;`;
+  )}): string => \`${root}${rawPath.replace('{', '${')}\`;`;
 };
