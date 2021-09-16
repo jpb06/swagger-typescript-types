@@ -1,3 +1,3 @@
 /* istanbul ignore file */
 
-export const getProcessArguments = () => process.argv.slice(2);
+export const getProcessArguments = (): Array<string> => process.argv.slice(2);

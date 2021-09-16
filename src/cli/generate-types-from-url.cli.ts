@@ -9,7 +9,7 @@ import { generateTypesFromUrl } from '../workflows/generate-types-from-url';
 
 /* istanbul ignore file */
 
-(async () => {
+(async (): Promise<void> => {
   try {
     const args = validateArguments();
 

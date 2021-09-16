@@ -1,7 +1,7 @@
 import { ApiSchemas } from '../../types/swagger-schema.interfaces';
 import { getSchemaName } from './get-schema-name';
 
-export const getTypesDefinitions = (schemas: ApiSchemas) => {
+export const getTypesDefinitions = (schemas: ApiSchemas): string => {
   let typesDefinition = '';
 
   for (const [typeName, { properties, required }] of Object.entries(schemas)) {

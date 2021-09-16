@@ -5,7 +5,7 @@ export const getJsDoc = (
   verb: string,
   summary?: string,
   description?: string,
-) => {
+): string => {
   let doc = `/** ${splitOnce(id, '_')[1]}\n * verb: ${verb}\n`;
   if (summary) {
     doc += ` * summary: ${summary}\n`;

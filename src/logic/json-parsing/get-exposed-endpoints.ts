@@ -16,7 +16,7 @@ export interface Route {
   responses: Array<RouteResponse>;
 }
 
-export const getExposedEndpoints = (json: ApiJson) => {
+export const getExposedEndpoints = (json: ApiJson): Array<Route> => {
   const routes: Array<Route> = [];
 
   for (const [path, verbs] of Object.entries(json.paths)) {

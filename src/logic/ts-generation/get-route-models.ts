@@ -3,7 +3,9 @@ import { BodyModel } from '../json-parsing/get-body-model';
 import { RouteResponse } from '../json-parsing/get-route-responses';
 import { getSchemaName } from '../json-parsing/get-schema-name';
 
-const getRouteResponsesModels = (responses: Array<RouteResponse>) =>
+const getRouteResponsesModels = (
+  responses: Array<RouteResponse>,
+): Array<string> =>
   responses.reduce<Array<string>>(
     (modelsList, { isPrimitiveModel, underlyingModel, model }) => {
       if (!isPrimitiveModel) {
@@ -20,7 +22,9 @@ const getRouteResponsesModels = (responses: Array<RouteResponse>) =>
     [],
   );
 
-const getRouteParametersModels = (parameters: Array<ApiRouteParameter>) =>
+const getRouteParametersModels = (
+  parameters: Array<ApiRouteParameter>,
+): Array<string> =>
   parameters.reduce<Array<string>>((acc, curr) => {
     if (curr.schema.$ref !== undefined) {
       return [...acc, getSchemaName(curr.schema.$ref)];
@@ -36,7 +40,7 @@ export const getRouteModels = (
   responses: Array<RouteResponse>,
   parameters: Array<ApiRouteParameter>,
   bodyModel?: BodyModel,
-) => {
+): Array<string> => {
   const responsesModels = getRouteResponsesModels(responses);
   const parametersModels = getRouteParametersModels(parameters);
 

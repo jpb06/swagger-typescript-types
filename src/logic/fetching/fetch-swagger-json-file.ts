@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export const fetchSwaggerJson = async (url: string) => {
+export const fetchSwaggerJson = async (url: string): Promise<string> => {
   try {
     const response = await axios.get(url);
     return response.data;
