@@ -26,27 +26,13 @@ export interface ApiRouteParameter {
   name: string;
   required: boolean;
   in: 'path';
-  schema: {
-    $ref?: string;
-    type?: string;
-    items?: {
-      $ref?: string;
-      type?: string;
-    };
-  };
+  schema: ApiTypeDefinition;
 }
 
 export interface ApiContent {
   content: {
     'application/json': {
-      schema: {
-        $ref?: string;
-        type?: string;
-        items?: {
-          $ref?: string;
-          type?: string;
-        };
-      };
+      schema: ApiTypeDefinition;
     };
   };
 }
@@ -55,13 +41,13 @@ export interface ApiSchemas {
   [key: string]: {
     type: string;
     properties: {
-      [key: string]: ApiProperty;
+      [key: string]: ApiTypeDefinition | { oneOf: Array<ApiTypeDefinition> };
     };
     required: Array<string>;
   };
 }
 
-export interface ApiProperty {
+export interface ApiTypeDefinition {
   type?: string;
   $ref?: string;
   items?: {
