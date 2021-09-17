@@ -26,22 +26,8 @@ export const validateArguments = (): GenerateTypesFromUrlArguments => {
     );
   }
 
-  const flags = args.splice(1);
-
-  let shouldClearOutPath = false;
-  if (flags.includes('--clear')) {
-    shouldClearOutPath = true;
-  }
-
-  let shouldCallEslint = false;
-  if (flags.includes('--lint')) {
-    shouldCallEslint = true;
-  }
-
   return {
     sourceUrl,
     envVarName,
-    shouldClearOutPath,
-    shouldCallEslint,
   };
 };

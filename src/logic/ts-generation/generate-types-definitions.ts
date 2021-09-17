@@ -1,7 +1,4 @@
-import { execSync } from 'child_process';
-import path from 'path';
-
-import { writeFile, remove, ensureDir } from 'fs-extra';
+import { writeFile, ensureDir } from 'fs-extra';
 
 import { ApiJson } from '../../types/swagger-schema.interfaces';
 import { outPath } from '../constants/out-path';
@@ -17,13 +14,7 @@ import { getRouteOutputsExports } from './get-route-outputs-exports';
 export const generateTypesDefinitions = async (
   envVarName: string,
   json: ApiJson,
-  shouldClearOutPath: boolean,
-  shouldCallEslint: boolean,
 ): Promise<void> => {
-  if (shouldClearOutPath) {
-    await remove(outPath);
-  }
-
   const typesDefinition = getTypesDefinitions(json.components.schemas);
   const endpoints = getExposedEndpoints(json);
 
@@ -57,13 +48,4 @@ export const generateTypesDefinitions = async (
   }
 
   await writeFile(`${outPath}/api-types.ts`, typesDefinition);
-
-  if (shouldCallEslint) {
-    execSync(
-      `${path.join('node_modules', '.bin', 'eslint')} ${outPath} --fix`,
-      {
-        stdio: 'inherit',
-      },
-    );
-  }
 };
