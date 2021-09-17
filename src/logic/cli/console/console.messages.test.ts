@@ -1,5 +1,6 @@
 import chalk from 'chalk';
 
+import { outPath } from '../../constants/out-path';
 import { reportError, reportSuccess } from './console.messages';
 
 jest.mock('chalk', () => ({
@@ -13,31 +14,29 @@ jest.mock('chalk', () => ({
 global.console = { info: jest.fn(), error: jest.fn() } as unknown as Console;
 
 describe('reportSuccess function', () => {
-  const path = './src/cool.ts';
-
   it('should call console.info', () => {
-    reportSuccess(path);
+    reportSuccess();
 
     // eslint-disable-next-line no-console
     expect(console.info).toHaveBeenCalledTimes(1);
   });
 
   it('should display the package name in cyan', () => {
-    reportSuccess(path);
+    reportSuccess();
 
     expect(chalk.cyanBright).toHaveBeenCalledWith('swagger-typescript-types');
   });
 
   it('should display sucess message in green', () => {
-    reportSuccess(path);
+    reportSuccess();
 
     expect(chalk.green).toHaveBeenCalledWith('Types generated and saved in');
   });
 
   it('should display the outpath in cyan underlined', () => {
-    reportSuccess(path);
+    reportSuccess();
 
-    expect(chalk.underline.cyanBright).toHaveBeenCalledWith(path);
+    expect(chalk.underline.cyanBright).toHaveBeenCalledWith(outPath);
   });
 });
 
