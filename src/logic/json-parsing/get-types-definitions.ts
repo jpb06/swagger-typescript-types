@@ -1,32 +1,18 @@
 import { ApiSchemas } from '../../types/swagger-schema.interfaces';
-import { getSchemaName } from './get-schema-name';
+import { getInterfaceMemberDefinition } from './get-interface-member-definition';
 
 export const getTypesDefinitions = (schemas: ApiSchemas): string => {
-  let typesDefinition = '';
+  let types = '';
 
   for (const [typeName, { properties, required }] of Object.entries(schemas)) {
-    typesDefinition += `export interface ${typeName} {\n`;
+    types += `export interface ${typeName} {\n`;
 
-    for (const [propName, { type, items, $ref }] of Object.entries(
-      properties,
-    )) {
-      const prop = `  ${propName}${required.includes(propName) ? '' : '?'}`;
-
-      if (type === 'array' && items) {
-        if (items.$ref !== undefined) {
-          typesDefinition += `${prop}: Array<${getSchemaName(items.$ref)}>;\n`;
-        } else if (items.type !== undefined) {
-          typesDefinition += `${prop}: Array<${items.type}>;\n`;
-        }
-      } else if ($ref) {
-        typesDefinition += `${prop}: ${getSchemaName($ref)};\n`;
-      } else {
-        typesDefinition += `${prop}: ${type};\n`;
-      }
+    for (const [propName, property] of Object.entries(properties)) {
+      types += getInterfaceMemberDefinition(propName, required, property);
     }
 
-    typesDefinition += '}\n';
+    types += '}\n';
   }
 
-  return typesDefinition;
+  return types;
 };

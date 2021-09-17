@@ -55,15 +55,17 @@ export interface ApiSchemas {
   [key: string]: {
     type: string;
     properties: {
-      [key: string]: {
-        type?: string;
-        $ref?: string;
-        items?: {
-          $ref: string;
-          type?: string;
-        };
-      };
+      [key: string]: ApiProperty;
     };
     required: Array<string>;
+  };
+}
+
+export interface ApiProperty {
+  type?: string;
+  $ref?: string;
+  items?: {
+    $ref: string;
+    type?: string;
   };
 }
