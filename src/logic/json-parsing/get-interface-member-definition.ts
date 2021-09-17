@@ -1,4 +1,7 @@
-import { ApiTypeDefinition } from '../../types/swagger-schema.interfaces';
+import {
+  ApiConditionalUnionTypeDefinition,
+  ApiTypeDefinition,
+} from '../../types/swagger-schema.interfaces';
 import { getSchemaName } from './get-schema-name';
 
 const getItemDefinition = (property: ApiTypeDefinition): string => {
@@ -18,15 +21,15 @@ const getItemDefinition = (property: ApiTypeDefinition): string => {
 export const getInterfaceMemberDefinition = (
   propName: string,
   required: Array<string>,
-  propertyDescription: ApiTypeDefinition | { oneOf: Array<ApiTypeDefinition> },
+  property: ApiConditionalUnionTypeDefinition,
 ): string => {
   const prop = `  ${propName}${required.includes(propName) ? '' : '?'}`;
 
-  if ('oneOf' in propertyDescription) {
-    return `${prop}: ${propertyDescription.oneOf
+  if ('oneOf' in property) {
+    return `${prop}: ${property.oneOf
       .map((el) => getItemDefinition(el))
       .join(' | ')};\n`;
   }
 
-  return `${prop}: ${getItemDefinition(propertyDescription)};\n`;
+  return `${prop}: ${getItemDefinition(property)};\n`;
 };

@@ -41,11 +41,15 @@ export interface ApiSchemas {
   [key: string]: {
     type: string;
     properties: {
-      [key: string]: ApiTypeDefinition | { oneOf: Array<ApiTypeDefinition> };
+      [key: string]: ApiConditionalUnionTypeDefinition;
     };
     required: Array<string>;
   };
 }
+
+export type ApiConditionalUnionTypeDefinition =
+  | ApiTypeDefinition
+  | { oneOf: Array<ApiTypeDefinition> };
 
 export interface ApiTypeDefinition {
   type?: string;
