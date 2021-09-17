@@ -7,32 +7,26 @@ import { getProcessArguments } from './process-argv.indirection';
 export const validateArguments = (): GenerateTypesFromUrlArguments => {
   dotenv.config();
   const args = getProcessArguments();
-  if (args.length < 2) {
-    throw new Error('Expecting two arguments: envVarName and outPath');
+
+  const errorMessage =
+    'Expecting the name of an environement variable as first parameter. This env var should contain an url to the swagger json to parse';
+  if (args.length === 0) {
+    throw new Error(errorMessage);
   }
 
   const envVarName = args[0];
-  const outPath = args[1];
 
   const sourceUrl = process.env[envVarName];
   if (!sourceUrl || sourceUrl === 'undefined') {
-    throw new Error(
-      'Expecting the name of an environement variable as first parameter. This env var should contain an url to the swagger json to parse',
-    );
+    throw new Error(errorMessage);
   }
   if (!urlRegex.test(sourceUrl)) {
     throw new Error(
-      'Expecting an url as first parameter. Example: https://cool.org/mySwagger/json',
+      'Expecting an url as value from the environement variable provided. Example: https://cool.org/mySwagger/json',
     );
   }
 
-  if (outPath.length === 0) {
-    throw new Error(
-      'Expecting a path as second argument to write the extracted types. Example: ./src/types/api-types.ts',
-    );
-  }
-
-  const flags = args.splice(2);
+  const flags = args.splice(1);
 
   let shouldClearOutPath = false;
   if (flags.includes('--clear')) {
@@ -47,7 +41,6 @@ export const validateArguments = (): GenerateTypesFromUrlArguments => {
   return {
     sourceUrl,
     envVarName,
-    outPath,
     shouldClearOutPath,
     shouldCallEslint,
   };

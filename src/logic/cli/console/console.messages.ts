@@ -1,6 +1,8 @@
 import chalk from 'chalk';
 
-export const reportSuccess = (outPath: string): void => {
+import { outPath } from '../../constants/out-path';
+
+export const reportSuccess = (): void => {
   // eslint-disable-next-line no-console
   console.info(
     `${chalk.cyanBright('swagger-typescript-types')} : 🚀 - ${chalk.green(

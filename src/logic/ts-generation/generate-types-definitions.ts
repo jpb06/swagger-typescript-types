@@ -4,6 +4,7 @@ import path from 'path';
 import { writeFile, remove, ensureDir } from 'fs-extra';
 
 import { ApiJson } from '../../types/swagger-schema.interfaces';
+import { outPath } from '../constants/out-path';
 import { getExposedEndpoints } from '../json-parsing/get-exposed-endpoints';
 import { getRoutePath } from '../json-parsing/get-route-path';
 import { getTypesDefinitions } from '../json-parsing/get-types-definitions';
@@ -16,7 +17,6 @@ import { getRouteOutputsExports } from './get-route-outputs-exports';
 export const generateTypesDefinitions = async (
   envVarName: string,
   json: ApiJson,
-  outPath: string,
   shouldClearOutPath: boolean,
   shouldCallEslint: boolean,
 ): Promise<void> => {
@@ -60,7 +60,7 @@ export const generateTypesDefinitions = async (
 
   if (shouldCallEslint) {
     execSync(
-      `${path.join('.', 'node_modules', '.bin', 'eslint')} ${outPath} --fix`,
+      `${path.join('node_modules', '.bin', 'eslint')} ${outPath} --fix`,
       {
         stdio: 'inherit',
       },
