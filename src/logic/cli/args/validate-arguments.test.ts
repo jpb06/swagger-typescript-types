@@ -38,24 +38,5 @@ describe('validateArguments function', () => {
 
     expect(data.envVarName).toBe('API_URL');
     expect(data.sourceUrl).toBe(url);
-    expect(data.shouldCallEslint).toBe(false);
-    expect(data.shouldClearOutPath).toBe(false);
-  });
-
-  it('should return additional flags if provided', () => {
-    const url = 'https://cool.org';
-    process.env.API_URL = url;
-    mocked(getProcessArguments).mockReturnValueOnce([
-      'API_URL',
-      '--clear',
-      '--lint',
-    ]);
-
-    const data = validateArguments();
-
-    expect(data.envVarName).toBe('API_URL');
-    expect(data.sourceUrl).toBe(url);
-    expect(data.shouldCallEslint).toBe(true);
-    expect(data.shouldClearOutPath).toBe(true);
   });
 });

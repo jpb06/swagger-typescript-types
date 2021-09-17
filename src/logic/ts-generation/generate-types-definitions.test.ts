@@ -1,6 +1,4 @@
-import { execSync } from 'child_process';
-
-import { remove, writeFile } from 'fs-extra';
+import { writeFile } from 'fs-extra';
 import { mocked } from 'ts-jest/utils';
 
 import swaggerJson from '../../tests-related/mock-data/swagger.json';
@@ -9,7 +7,6 @@ import { ApiJson } from '../../types/swagger-schema.interfaces';
 import { generateTypesDefinitions } from './generate-types-definitions';
 
 jest.mock('fs-extra');
-jest.mock('child_process');
 
 const expectWriteFileCallToContain = (index: number, regex: RegExp): void => {
   const rawResult = mocked(writeFile).mock.calls[index][1];
@@ -32,7 +29,7 @@ describe('generateTypesDefinitions function', () => {
   beforeEach(() => jest.clearAllMocks());
 
   it('should generate all the types', async () => {
-    await generateTypesDefinitions('API_URL', json, false, false);
+    await generateTypesDefinitions('API_URL', json);
 
     expect(writeFile).toHaveBeenCalledTimes(6);
     const rawResult = mocked(writeFile).mock.calls[5][1];
@@ -128,7 +125,7 @@ describe('generateTypesDefinitions function', () => {
   });
 
   it('should export one path variable by exposed endpoint', async () => {
-    await generateTypesDefinitions('API_URL', json, false, false);
+    await generateTypesDefinitions('API_URL', json);
 
     expect(writeFile).toHaveBeenCalledTimes(6);
 
@@ -142,7 +139,7 @@ describe('generateTypesDefinitions function', () => {
   });
 
   it('should import related types for each exposed endpoint', async () => {
-    await generateTypesDefinitions('API_URL', json, false, false);
+    await generateTypesDefinitions('API_URL', json);
 
     expect(writeFile).toHaveBeenCalledTimes(6);
 
@@ -155,7 +152,7 @@ describe('generateTypesDefinitions function', () => {
   });
 
   it('should generate jsdoc for each endpoint', async () => {
-    await generateTypesDefinitions('API_URL', json, false, false);
+    await generateTypesDefinitions('API_URL', json);
 
     expect(writeFile).toHaveBeenCalledTimes(6);
 
@@ -169,7 +166,7 @@ describe('generateTypesDefinitions function', () => {
   });
 
   it('should export on type by response', async () => {
-    await generateTypesDefinitions('API_URL', json, false, false);
+    await generateTypesDefinitions('API_URL', json);
 
     expect(writeFile).toHaveBeenCalledTimes(6);
 
@@ -182,7 +179,7 @@ describe('generateTypesDefinitions function', () => {
   });
 
   it('should export the request body type if any', async () => {
-    await generateTypesDefinitions('API_URL', json, false, false);
+    await generateTypesDefinitions('API_URL', json);
 
     expect(writeFile).toHaveBeenCalledTimes(6);
 
@@ -191,35 +188,11 @@ describe('generateTypesDefinitions function', () => {
   });
 
   it('should generate valid typescript for types', async () => {
-    await generateTypesDefinitions('API_URL', json, false, false);
+    await generateTypesDefinitions('API_URL', json);
 
     expect(writeFile).toHaveBeenCalledTimes(6);
     const rawResult = mocked(writeFile).mock.calls[5][1];
     const transpilationResult = await transpileRaw(rawResult);
     expect(transpilationResult).toHaveLength(0);
-  });
-
-  it('should not clear output path', async () => {
-    await generateTypesDefinitions('API_URL', json, false, false);
-
-    expect(remove).toHaveBeenCalledTimes(0);
-  });
-
-  it('should clear output path', async () => {
-    await generateTypesDefinitions('API_URL', json, true, false);
-
-    expect(remove).toHaveBeenCalledTimes(1);
-  });
-
-  it('should not use the linter', async () => {
-    await generateTypesDefinitions('API_URL', json, false, false);
-
-    expect(execSync).toHaveBeenCalledTimes(0);
-  });
-
-  it('should use the linter to format files', async () => {
-    await generateTypesDefinitions('API_URL', json, false, true);
-
-    expect(execSync).toHaveBeenCalledTimes(1);
   });
 });
