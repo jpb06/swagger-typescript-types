@@ -29,6 +29,10 @@ export interface DevDto {
 
 But what if we could just extract these models and generate types instead? Oh...! 😏
 
+### 🔶 Disclaimer
+
+⚠️🚨 I wrote this for a stack based on [nestjs](https://nestjs.com/) for the backend and [react-query](https://react-query.tanstack.com/) for the frontend, so this tool may or may not suit your needs. If you think I can help, do not hesitate to drop an issue 🙃.
+
 ## :zap: Installation
 
 To install, use either yarn or npm:
