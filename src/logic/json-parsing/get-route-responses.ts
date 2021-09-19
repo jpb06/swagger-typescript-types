@@ -1,3 +1,5 @@
+import chalk from 'chalk';
+
 import { ApiContent } from '../../types/swagger-schema.interfaces';
 import { getSchemaName } from './get-schema-name';
 
@@ -30,8 +32,8 @@ export const getRouteResponses = (responses: {
         model: modelName,
         isPrimitiveModel: false,
       });
-    } else if (type === 'array') {
-      if (items?.$ref) {
+    } else if (type === 'array' && items) {
+      if (items.$ref) {
         const modelName = getSchemaName(items.$ref);
         routeResponses.push({
           statusCode,
@@ -39,10 +41,21 @@ export const getRouteResponses = (responses: {
           underlyingModel: modelName,
           isPrimitiveModel: false,
         });
-      } else if (items?.type) {
+      } else if (items.type) {
         routeResponses.push({
           statusCode,
           model: `Array<${items.type}>`,
+          isPrimitiveModel: true,
+        });
+      } else {
+        console.error(
+          chalk.redBright(
+            `Unable to extract type for response ${statusCode}; given array without $ref or type`,
+          ),
+        );
+        routeResponses.push({
+          statusCode,
+          model: 'undefined',
           isPrimitiveModel: true,
         });
       }
@@ -50,6 +63,17 @@ export const getRouteResponses = (responses: {
       routeResponses.push({
         statusCode,
         model: type,
+        isPrimitiveModel: true,
+      });
+    } else {
+      console.error(
+        chalk.redBright(
+          `Unable to extract type for response ${statusCode}; no $ref or type provided`,
+        ),
+      );
+      routeResponses.push({
+        statusCode,
+        model: 'undefined',
         isPrimitiveModel: true,
       });
     }
