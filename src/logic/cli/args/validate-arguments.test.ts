@@ -8,6 +8,10 @@ jest.mock('./process-argv.indirection');
 describe('validateArguments function', () => {
   const outPath = './src/api';
 
+  beforeEach(() => {
+    process.env.API_URL = undefined;
+  });
+
   it('should throw an error if the number of arguments is not equal to three', () => {
     mocked(getProcessArguments).mockReturnValueOnce([]);
     expect(validateArguments).toThrowError(
