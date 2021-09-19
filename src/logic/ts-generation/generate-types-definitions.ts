@@ -1,7 +1,6 @@
 import { writeFile, ensureDir } from 'fs-extra';
 
 import { ApiJson } from '../../types/swagger-schema.interfaces';
-import { outPath } from '../constants/out-path';
 import { getExposedEndpoints } from '../json-parsing/get-exposed-endpoints';
 import { getRoutePath } from '../json-parsing/get-route-path';
 import { getTypesDefinitions } from '../json-parsing/get-types-definitions';
@@ -13,6 +12,7 @@ import { getRouteOutputsExports } from './get-route-outputs-exports';
 
 export const generateTypesDefinitions = async (
   envVarName: string,
+  outPath: string,
   json: ApiJson,
 ): Promise<void> => {
   const typesDefinition = getTypesDefinitions(json.components.schemas);

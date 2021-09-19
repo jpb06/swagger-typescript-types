@@ -15,7 +15,7 @@ import { generateTypesFromUrl } from '../workflows/generate-types-from-url';
 
     await generateTypesFromUrl(args);
 
-    reportSuccess();
+    reportSuccess(args.outPath);
     process.exit(0);
   } catch (err) {
     reportError(err);

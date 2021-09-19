@@ -7,18 +7,18 @@ import { getProcessArguments } from './process-argv.indirection';
 export const validateArguments = (): GenerateTypesFromUrlArguments => {
   dotenv.config();
   const args = getProcessArguments();
-
-  const errorMessage =
-    'Expecting the name of an environement variable as first parameter. This env var should contain an url to the swagger json to parse';
-  if (args.length === 0) {
-    throw new Error(errorMessage);
+  if (args.length !== 2) {
+    throw new Error('Expecting two arguments');
   }
 
   const envVarName = args[0];
+  const outPath = args[1];
 
   const sourceUrl = process.env[envVarName];
   if (!sourceUrl || sourceUrl === 'undefined') {
-    throw new Error(errorMessage);
+    throw new Error(
+      'Expecting the name of an environement variable as first parameter. This env var should contain an url to the swagger json to parse',
+    );
   }
   if (!urlRegex.test(sourceUrl)) {
     throw new Error(
@@ -28,6 +28,7 @@ export const validateArguments = (): GenerateTypesFromUrlArguments => {
 
   return {
     sourceUrl,
+    outPath,
     envVarName,
   };
 };
