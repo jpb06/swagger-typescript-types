@@ -1,11 +1,11 @@
-import dotenv from 'dotenv';
+import dotenv from 'dotenv-flow';
 
 import { GenerateTypesFromUrlArguments } from '../../../workflows/generate-types-from-url';
 import { urlRegex } from '../url-regex';
 import { getProcessArguments } from './process-argv.indirection';
 
 export const validateArguments = (): GenerateTypesFromUrlArguments => {
-  dotenv.config();
+  dotenv.config({ silent: true });
   const args = getProcessArguments();
   if (args.length !== 3) {
     throw new Error(
