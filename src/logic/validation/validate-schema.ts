@@ -11,10 +11,11 @@ export const validateSchema = async (rawJson: string): Promise<ApiJson> => {
     strictTypes: false,
   });
 
-  const validate = ajv.compile(openapi.openapiV3);
+  const validate = ajv.compile<ApiJson>(openapi.openapiV3);
 
   const isValid = validate(rawJson);
   if (!isValid) {
+    console.error(validate.errors);
     throw new Error('Invalid schema');
   }
 

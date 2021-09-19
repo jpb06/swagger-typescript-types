@@ -10,21 +10,24 @@ plugins:
   - '@typescript-eslint'
   - prettier
   - import
+  - jest
 
 extends:
   - eslint:recommended
   - plugin:@typescript-eslint/recommended
   - plugin:prettier/recommended
   - plugin:import/typescript
+  - plugin:jest/recommended
 
 env:
   jest: true
   node: true
+  es6: true
 
 rules:
   '@typescript-eslint/await-thenable': error
   '@typescript-eslint/explicit-module-boundary-types': off
-  '@typescript-eslint/explicit-function-return-type': off
+  '@typescript-eslint/explicit-function-return-type': warn
   '@typescript-eslint/explicit-member-accessibility': off
   '@typescript-eslint/indent': off
   '@typescript-eslint/interface-name-prefix': off

@@ -3,8 +3,11 @@ import { readJson } from 'fs-extra';
 import { validateSchema } from './validate-schema';
 
 describe('validateSchema function', () => {
-  it('should throw an error if schema is invalid', () => {
-    expect(validateSchema('in')).rejects.toThrow('Invalid schema');
+  global.console = { error: jest.fn() } as unknown as Console;
+
+  it('should throw an error if schema is invalid', async () => {
+    await expect(validateSchema('in')).rejects.toThrow('Invalid schema');
+    expect(console.error).toHaveBeenCalledTimes(1);
   });
 
   it('should return json if schema is valid', async () => {

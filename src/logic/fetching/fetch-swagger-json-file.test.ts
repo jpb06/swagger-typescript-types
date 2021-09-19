@@ -6,10 +6,10 @@ import { fetchSwaggerJson } from './fetch-swagger-json-file';
 jest.mock('axios');
 
 describe('fetchSwaggerJson function', () => {
-  it('should throw an error if fetching json failed', () => {
+  it('should throw an error if fetching json failed', async () => {
     mocked(axios.get).mockRejectedValueOnce('Oh no!');
 
-    expect(fetchSwaggerJson('url')).rejects.toThrow(
+    await expect(fetchSwaggerJson('url')).rejects.toThrow(
       'Unable to fetch swagger json',
     );
   });

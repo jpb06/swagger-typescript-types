@@ -1,5 +1,5 @@
-import { fetchSwaggerJson } from './workflows/logic/fetch-swagger-json-file';
-import { generateTypesDefinitions } from './workflows/logic/generate-types-definitions';
-import { validateSchema } from './workflows/logic/validate-schema';
+import { fetchSwaggerJson } from './logic/fetching/fetch-swagger-json-file';
+import { generateTypesDefinitions } from './logic/ts-generation/generate-types-definitions';
+import { validateSchema } from './logic/validation/validate-schema';
 
 export { fetchSwaggerJson, validateSchema, generateTypesDefinitions };

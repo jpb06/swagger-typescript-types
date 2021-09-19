@@ -5,22 +5,6 @@ export interface ApiJson {
   };
 }
 
-interface ApiSchemas {
-  [key: string]: {
-    type: string;
-    properties: {
-      [key: string]: {
-        type?: string;
-        $ref?: string;
-        items?: {
-          $ref: string;
-        };
-      };
-    };
-    required: Array<string>;
-  };
-}
-
 type Verbs = 'get' | 'post' | 'put' | 'delete';
 
 type ApiPath = {
@@ -28,25 +12,50 @@ type ApiPath = {
 };
 
 interface ApiOperation {
-  parameters: Array<unknown>;
-  requestBody: ApiRequestBody;
+  operationId: string;
+  summary: string;
+  description: string;
+  parameters: Array<ApiRouteParameter>;
+  requestBody: ApiContent & { required: boolean };
   responses: {
-    [key: string]: ApiResponseDetails;
+    [key: string]: ApiContent & { description: string };
   };
 }
 
-interface ApiRequestBody {
+export interface ApiRouteParameter {
+  name: string;
   required: boolean;
-  content: ApiResponseDetails;
+  in: 'path';
+  schema: ApiTypeDefinition;
 }
 
-interface ApiResponseDetails {
-  description: string;
+export interface ApiContent {
   content: {
     'application/json': {
-      schema: {
-        $ref: string;
-      };
+      schema: ApiTypeDefinition;
     };
+  };
+}
+
+export interface ApiSchemas {
+  [key: string]: {
+    type: string;
+    properties: {
+      [key: string]: ApiConditionalUnionTypeDefinition;
+    };
+    required: Array<string>;
+  };
+}
+
+export type ApiConditionalUnionTypeDefinition =
+  | ApiTypeDefinition
+  | { oneOf: Array<ApiTypeDefinition> };
+
+export interface ApiTypeDefinition {
+  type?: string;
+  $ref?: string;
+  items?: {
+    $ref?: string;
+    type?: string;
   };
 }

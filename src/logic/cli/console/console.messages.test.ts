@@ -13,31 +13,31 @@ jest.mock('chalk', () => ({
 global.console = { info: jest.fn(), error: jest.fn() } as unknown as Console;
 
 describe('reportSuccess function', () => {
-  const path = './src/cool.ts';
+  const outPath = './src/api';
 
   it('should call console.info', () => {
-    reportSuccess(path);
+    reportSuccess(outPath);
 
     // eslint-disable-next-line no-console
     expect(console.info).toHaveBeenCalledTimes(1);
   });
 
   it('should display the package name in cyan', () => {
-    reportSuccess(path);
+    reportSuccess(outPath);
 
     expect(chalk.cyanBright).toHaveBeenCalledWith('swagger-typescript-types');
   });
 
   it('should display sucess message in green', () => {
-    reportSuccess(path);
+    reportSuccess(outPath);
 
     expect(chalk.green).toHaveBeenCalledWith('Types generated and saved in');
   });
 
   it('should display the outpath in cyan underlined', () => {
-    reportSuccess(path);
+    reportSuccess(outPath);
 
-    expect(chalk.underline.cyanBright).toHaveBeenCalledWith(path);
+    expect(chalk.underline.cyanBright).toHaveBeenCalledWith(outPath);
   });
 });
 
