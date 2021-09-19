@@ -30,7 +30,7 @@ const getRouteParametersModels = (
       return [...acc, getSchemaName(curr.schema.$ref)];
     }
     if (curr.schema.items?.$ref !== undefined) {
-      return [...acc, getSchemaName(curr.schema.items?.$ref)];
+      return [...acc, getSchemaName(curr.schema.items.$ref)];
     }
 
     return acc;
@@ -41,13 +41,13 @@ export const getRouteModels = (
   parameters: Array<ApiRouteParameter>,
   bodyModel?: BodyModel,
 ): Array<string> => {
-  const responsesModels = getRouteResponsesModels(responses);
   const parametersModels = getRouteParametersModels(parameters);
+  const responsesModels = getRouteResponsesModels(responses);
 
-  const models = [...responsesModels, ...parametersModels];
+  const models = [...parametersModels, ...responsesModels];
 
   if (bodyModel && !bodyModel.isPrimitiveModel) {
-    models.push(bodyModel.underlyingModel ?? bodyModel.model);
+    models.unshift(bodyModel.underlyingModel ?? bodyModel.model);
   }
 
   return models;
