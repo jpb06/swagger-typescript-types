@@ -55,7 +55,7 @@ export interface ApiTypeDefinition {
   type?: string;
   $ref?: string;
   items?: {
-    $ref: string;
+    $ref?: string;
     type?: string;
   };
 }
