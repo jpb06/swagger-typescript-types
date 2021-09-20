@@ -128,10 +128,8 @@ import { DevDto, BadRequestDto, ApiResponseDto } from './../api-types';
 export const getPath = (id: number): string =>
   `${process.env.API_URL}/squads/${id}/devs`;
 
-export type Response200 = Array<DevDto>;
-export type Response400 = BadRequestDto;
-export type Response404 = ApiResponseDto;
-export type Response500 = ApiResponseDto;
+export type GetSquadsDevelopersSuccess = Array<DevDto>;
+export type GetSquadsDevelopersError = BadRequestDto | ApiResponseDto;
 ```
 
 ## :zap: Api
