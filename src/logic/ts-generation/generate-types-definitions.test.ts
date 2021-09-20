@@ -32,7 +32,12 @@ describe('generateTypesDefinitions function', () => {
   beforeEach(() => jest.clearAllMocks());
 
   it('should generate all the types', async () => {
-    await generateTypesDefinitions('API_URL', outPath, json);
+    const result = await generateTypesDefinitions('API_URL', outPath, json);
+
+    expect(result).toStrictEqual({
+      typesGenerated: true,
+      endpointsCount: 5,
+    });
 
     expect(writeFile).toHaveBeenCalledTimes(6);
     const rawResult = mocked(writeFile).mock.calls[5][1];
@@ -227,5 +232,19 @@ describe('generateTypesDefinitions function', () => {
 
     expect(console.error).toHaveBeenCalledTimes(1);
     expect(writeFile).toHaveBeenCalledTimes(1);
+  });
+
+  it('should not write anything', async () => {
+    const result = await generateTypesDefinitions('API_URL', outPath, {
+      components: { schemas: {} },
+      paths: [],
+    });
+
+    expect(result).toStrictEqual({
+      typesGenerated: false,
+      endpointsCount: 0,
+    });
+
+    expect(writeFile).toHaveBeenCalledTimes(0);
   });
 });
