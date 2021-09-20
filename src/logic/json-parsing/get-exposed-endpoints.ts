@@ -24,8 +24,8 @@ export const getExposedEndpoints = (json: ApiJson): Array<Route> => {
       verb,
       { operationId, responses, summary, description, requestBody, parameters },
     ] of Object.entries(verbs)) {
-      const bodyModel = getBodyModel(requestBody);
-      const routeResponses = getRouteResponses(responses);
+      const bodyModel = getBodyModel(operationId, requestBody);
+      const routeResponses = getRouteResponses(operationId, responses);
 
       routes.push({
         id: operationId,
