@@ -18,9 +18,10 @@ export const displayError = (err: unknown): void => {
 };
 
 export const displayWarning = (text: string, id?: string): void => {
+  const optionalId = id ? `${chalk.magentaBright(id)}:` : '';
   console.error(
-    `${chalk.cyanBright('swagger-typescript-types')} 🚨 - ${
-      id ? `${chalk.magentaBright(id)}:` : ''
-    } ${chalk.redBright(text)}`,
+    `${chalk.cyanBright(
+      'swagger-typescript-types',
+    )} 🚨 - ${optionalId} ${chalk.redBright(text)}`,
   );
 };
