@@ -1,7 +1,5 @@
-import chalk from 'chalk';
-
 import { ApiContent } from '../../types/swagger-schema.interfaces';
-import { getSchemaName } from './get-schema-name';
+import { getRouteResponseModel } from './get-route-response-model';
 
 export interface RouteResponse {
   statusCode: string;
@@ -10,72 +8,32 @@ export interface RouteResponse {
   underlyingModel?: string;
 }
 
-export const getRouteResponses = (responses: {
-  [key: string]: ApiContent;
-}): Array<RouteResponse> => {
+export const getRouteResponses = (
+  operationId: string,
+  responses: {
+    [key: string]: ApiContent;
+  },
+): Array<RouteResponse> => {
   const routeResponses: Array<RouteResponse> = [];
 
   for (const [
     statusCode,
     {
       content: {
-        'application/json': {
-          schema: { $ref, type, items },
-        },
+        'application/json': { schema },
       },
     },
   ] of Object.entries(responses)) {
-    if ($ref) {
-      const modelName = getSchemaName($ref);
-      routeResponses.push({
-        statusCode,
-        model: modelName,
-        isPrimitiveModel: false,
-      });
-    } else if (type === 'array' && items) {
-      if (items.$ref) {
-        const modelName = getSchemaName(items.$ref);
-        routeResponses.push({
-          statusCode,
-          model: `Array<${modelName}>`,
-          underlyingModel: modelName,
-          isPrimitiveModel: false,
-        });
-      } else if (items.type) {
-        routeResponses.push({
-          statusCode,
-          model: `Array<${items.type}>`,
-          isPrimitiveModel: true,
-        });
-      } else {
-        console.error(
-          chalk.redBright(
-            `Unable to extract type for response ${statusCode}; given array without $ref or type`,
-          ),
-        );
-        routeResponses.push({
-          statusCode,
-          model: 'undefined',
-          isPrimitiveModel: true,
-        });
-      }
-    } else if (type) {
-      routeResponses.push({
-        statusCode,
-        model: type,
-        isPrimitiveModel: true,
-      });
-    } else {
-      console.error(
-        chalk.redBright(
-          `Unable to extract type for response ${statusCode}; no $ref or type provided`,
+    if ('oneOf' in schema) {
+      routeResponses.push(
+        ...schema.oneOf.map((el) =>
+          getRouteResponseModel(operationId, el, statusCode),
         ),
       );
-      routeResponses.push({
-        statusCode,
-        model: 'undefined',
-        isPrimitiveModel: true,
-      });
+    } else {
+      routeResponses.push(
+        getRouteResponseModel(operationId, schema, statusCode),
+      );
     }
   }
 
