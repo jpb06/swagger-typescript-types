@@ -4,13 +4,13 @@ describe('getBodyModel function', () => {
   global.console = { error: jest.fn() } as unknown as Console;
 
   it('should return undefined if no request body', () => {
-    const result = getBodyModel(undefined);
+    const result = getBodyModel('myRoute', undefined);
 
     expect(result).toBeUndefined();
   });
 
   it('should return undefined if schema has no props', () => {
-    const result = getBodyModel({
+    const result = getBodyModel('myRoute', {
       content: {
         'application/json': {
           schema: {},
@@ -22,7 +22,7 @@ describe('getBodyModel function', () => {
   });
 
   it('should return undefined if schema is an array whose items have no type definition', () => {
-    const result = getBodyModel({
+    const result = getBodyModel('myRoute', {
       content: {
         'application/json': {
           schema: {
@@ -38,7 +38,7 @@ describe('getBodyModel function', () => {
   });
 
   it('should return schema name', () => {
-    const result = getBodyModel({
+    const result = getBodyModel('myRoute', {
       content: {
         'application/json': {
           schema: { $ref: 'yolo/Cool' },
@@ -54,7 +54,7 @@ describe('getBodyModel function', () => {
 
   it('should return the schema type', () => {
     const type = 'string';
-    const result = getBodyModel({
+    const result = getBodyModel('myRoute', {
       content: {
         'application/json': {
           schema: {
@@ -71,7 +71,7 @@ describe('getBodyModel function', () => {
   });
 
   it('should return an array containing a custom type', () => {
-    const result = getBodyModel({
+    const result = getBodyModel('myRoute', {
       content: {
         'application/json': {
           schema: {
@@ -93,7 +93,7 @@ describe('getBodyModel function', () => {
 
   it('should return an array containing a primitive type', () => {
     const type = 'string';
-    const result = getBodyModel({
+    const result = getBodyModel('myRoute', {
       content: {
         'application/json': {
           schema: {

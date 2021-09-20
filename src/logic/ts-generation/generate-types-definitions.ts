@@ -1,6 +1,7 @@
 import { writeFile, ensureDir } from 'fs-extra';
 
 import { ApiJson } from '../../types/swagger-schema.interfaces';
+import { displayWarning } from '../cli/console/console.messages';
 import { getExposedEndpoints } from '../json-parsing/get-exposed-endpoints';
 import { getRoutePath } from '../json-parsing/get-route-path';
 import { getTypesDefinitions } from '../json-parsing/get-types-definitions';
@@ -28,22 +29,26 @@ export const generateTypesDefinitions = async (
     bodyModel,
     responses,
   } of endpoints) {
-    const [controller, route] = splitOnce(id, '_');
+    const [controller, routeName] = splitOnce(id, '_');
+    if (routeName === null) {
+      displayWarning(`Missing route name in ${controller}`);
+      continue;
+    }
 
     const controllerPath = `${outPath}/${controller}`;
     await ensureDir(controllerPath);
 
     const models = getRouteModels(responses, parameters, bodyModel);
-    const routePath = getRoutePath(envVarName, rawPath, parameters);
+    const routePath = getRoutePath(routeName, envVarName, rawPath, parameters);
     const inputsExports = getRouteInputsExports(bodyModel);
-    const outputExports = getRouteOutputsExports(responses);
+    const outputExports = getRouteOutputsExports(routeName, responses);
     const doc = getJsDoc(id, verb, summary, description);
 
     await writeFile(
-      `${controllerPath}/${route}.ts`,
+      `${controllerPath}/${routeName}.ts`,
       `${doc}\n\nimport { ${models.join(
         ', ',
-      )} } from './../api-types';\n\n${routePath}\n\n${inputsExports}${outputExports}`,
+      )} } from './../api-types';\n\n${routePath}\n\n${inputsExports}${outputExports}\n`,
     );
   }
 

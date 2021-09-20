@@ -1,9 +1,8 @@
-import chalk from 'chalk';
-
 import {
   ApiConditionalUnionTypeDefinition,
   ApiTypeDefinition,
 } from '../../types/swagger-schema.interfaces';
+import { displayWarning } from '../cli/console/console.messages';
 import { getSchemaName } from './get-schema-name';
 
 const getItemDefinition = (
@@ -22,10 +21,8 @@ const getItemDefinition = (
         return `Array<${property.items.type}>`;
       }
 
-      console.error(
-        chalk.redBright(
-          `Unable to extract type from ${propName}; given array without $ref or type`,
-        ),
+      displayWarning(
+        `Unable to extract type from ${propName}; given array without $ref or type`,
       );
       return undefined;
     }
@@ -33,10 +30,8 @@ const getItemDefinition = (
     return `${property.type}`;
   }
 
-  console.error(
-    chalk.redBright(
-      `Unable to extract type from ${propName}; no $ref or type provided`,
-    ),
+  displayWarning(
+    `Unable to extract type from ${propName}; no $ref or type provided`,
   );
   return undefined;
 };

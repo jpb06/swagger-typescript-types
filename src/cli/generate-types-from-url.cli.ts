@@ -2,8 +2,8 @@
 
 import { validateArguments } from '../logic/cli/args/validate-arguments';
 import {
-  reportError,
-  reportSuccess,
+  displayError,
+  displaySuccess,
 } from '../logic/cli/console/console.messages';
 import { generateTypesFromUrl } from '../workflows/generate-types-from-url';
 
@@ -15,10 +15,10 @@ import { generateTypesFromUrl } from '../workflows/generate-types-from-url';
 
     await generateTypesFromUrl(args);
 
-    reportSuccess(args.outPath);
+    displaySuccess(args.outPath);
     process.exit(0);
   } catch (err) {
-    reportError(err);
+    displayError(err);
     process.exit(1);
   }
 })();

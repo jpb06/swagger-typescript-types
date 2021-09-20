@@ -1,6 +1,8 @@
-import chalk from 'chalk';
-
-import { ApiContent } from '../../types/swagger-schema.interfaces';
+import {
+  ApiContent,
+  ApiTypeDefinition,
+} from '../../types/swagger-schema.interfaces';
+import { displayWarning } from '../cli/console/console.messages';
 import { getSchemaName } from './get-schema-name';
 
 export interface BodyModel {
@@ -10,13 +12,15 @@ export interface BodyModel {
 }
 
 export const getBodyModel = (
+  operationId: string,
   requestBody?: ApiContent,
 ): BodyModel | undefined => {
   if (!requestBody) {
     return undefined;
   }
 
-  const schema = requestBody.content['application/json'].schema;
+  const schema = requestBody.content['application/json']
+    .schema as ApiTypeDefinition;
 
   if (schema.$ref) {
     return {
@@ -43,10 +47,9 @@ export const getBodyModel = (
         };
       }
 
-      console.error(
-        chalk.redBright(
-          `Unable to extract type for request body; given array without $ref or type`,
-        ),
+      displayWarning(
+        `Unable to extract type for request body; given array without $ref or type`,
+        operationId,
       );
       return undefined;
     }

@@ -32,7 +32,7 @@ export interface ApiRouteParameter {
 export interface ApiContent {
   content: {
     'application/json': {
-      schema: ApiTypeDefinition;
+      schema: ApiConditionalUnionTypeDefinition;
     };
   };
 }

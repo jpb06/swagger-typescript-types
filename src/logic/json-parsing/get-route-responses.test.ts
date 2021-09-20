@@ -6,7 +6,7 @@ describe('getRouteResponses function', () => {
   afterEach(() => jest.clearAllMocks());
 
   it('should return a primitive type', () => {
-    const result = getRouteResponses({
+    const result = getRouteResponses('cool', {
       '200': {
         content: {
           'application/json': {
@@ -27,7 +27,7 @@ describe('getRouteResponses function', () => {
   });
 
   it('should return a custom type', () => {
-    const result = getRouteResponses({
+    const result = getRouteResponses('cool', {
       '200': {
         content: {
           'application/json': {
@@ -48,7 +48,7 @@ describe('getRouteResponses function', () => {
   });
 
   it('should return an array containing primitive types', () => {
-    const result = getRouteResponses({
+    const result = getRouteResponses('cool', {
       '200': {
         content: {
           'application/json': {
@@ -72,7 +72,7 @@ describe('getRouteResponses function', () => {
   });
 
   it('should return an array containing custom types', () => {
-    const result = getRouteResponses({
+    const result = getRouteResponses('cool', {
       '200': {
         content: {
           'application/json': {
@@ -97,7 +97,7 @@ describe('getRouteResponses function', () => {
   });
 
   it('should warn when type could not be extracted at all', () => {
-    const result = getRouteResponses({
+    const result = getRouteResponses('cool', {
       '200': {
         content: {
           'application/json': {
@@ -117,7 +117,7 @@ describe('getRouteResponses function', () => {
   });
 
   it('should warn when type could not be extracted for array', () => {
-    const result = getRouteResponses({
+    const result = getRouteResponses('cool', {
       '200': {
         content: {
           'application/json': {
@@ -137,5 +137,37 @@ describe('getRouteResponses function', () => {
       isPrimitiveModel: true,
     });
     expect(console.error).toHaveBeenCalledTimes(1);
+  });
+
+  it('should extract type from onOf', () => {
+    const result = getRouteResponses('cool', {
+      '200': {
+        content: {
+          'application/json': {
+            schema: {
+              oneOf: [
+                {
+                  $ref: 'yolo/Cool',
+                },
+                { type: 'array', items: { $ref: 'super/Bro' } },
+              ],
+            },
+          },
+        },
+      },
+    });
+
+    expect(result).toHaveLength(2);
+    expect(result[0]).toStrictEqual({
+      statusCode: '200',
+      model: 'Cool',
+      isPrimitiveModel: false,
+    });
+    expect(result[1]).toStrictEqual({
+      statusCode: '200',
+      model: 'Array<Bro>',
+      underlyingModel: 'Bro',
+      isPrimitiveModel: false,
+    });
   });
 });
