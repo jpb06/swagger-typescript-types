@@ -1,6 +1,8 @@
 import axios from 'axios';
 
-export const fetchSwaggerJson = async (url: string): Promise<string> => {
+import { SwaggerJson } from '../../types/swagger-json.interface';
+
+export const fetchSwaggerJson = async (url: string): Promise<SwaggerJson> => {
   try {
     const response = await axios.get(url);
     return response.data;
