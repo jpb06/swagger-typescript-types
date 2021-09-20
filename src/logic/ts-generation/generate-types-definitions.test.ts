@@ -4,7 +4,7 @@ import { mocked } from 'ts-jest/utils';
 import swaggerJsonWithMissingRouteName from '../../tests-related/mock-data/swagger-with-missing-routename.json';
 import swaggerJson from '../../tests-related/mock-data/swagger.json';
 import { transpileRaw } from '../../tests-related/ts/transpile-raw';
-import { ApiJson } from '../../types/swagger-schema.interfaces';
+import { ValidatedOpenaApiSchema } from '../../types/swagger-schema.interfaces';
 import { generateTypesDefinitions } from './generate-types-definitions';
 
 jest.mock('fs-extra');
@@ -26,7 +26,7 @@ const expectToContainSuccessAndError = (
 
 describe('generateTypesDefinitions function', () => {
   global.console = { error: jest.fn() } as unknown as Console;
-  const json = swaggerJson as unknown as ApiJson;
+  const json = swaggerJson as unknown as ValidatedOpenaApiSchema;
   const outPath = './src/api';
 
   beforeEach(() => jest.clearAllMocks());
@@ -227,7 +227,7 @@ describe('generateTypesDefinitions function', () => {
     await generateTypesDefinitions(
       'API_URL',
       outPath,
-      swaggerJsonWithMissingRouteName as unknown as ApiJson,
+      swaggerJsonWithMissingRouteName as unknown as ValidatedOpenaApiSchema,
     );
 
     expect(console.error).toHaveBeenCalledTimes(1);
