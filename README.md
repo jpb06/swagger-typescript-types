@@ -143,7 +143,7 @@ On top of the cli, this package exposes the following functions:
 This function fetches the swagger json using axios. Typical use:
 
 ```typescript
-const json: any = await fetchSwaggerJson(
+const json: InputSwaggerJson = await fetchSwaggerJson(
   'https://workshop-react-back.herokuapp.com/-json',
 );
 ```
@@ -153,9 +153,9 @@ const json: any = await fetchSwaggerJson(
 This function validates some arbitrary json against the [openapiv3 schema](https://github.com/APIDevTools/openapi-schemas). Typically use:
 
 ```typescript
-const json: string = '{ ... }';
+const json: InputSwaggerJson = { ... };
 
-const schema = await validateSchema(data);
+const schema: ValidatedOpenaApiSchema = await validateSchema(data);
 ```
 
 #### 🌀 generateTypesDefinitions
@@ -165,7 +165,7 @@ This function extracts models from the swagger json and generates typings from t
 ```typescript
 const enVarName = 'API_URL';
 const outPath = './src/api.types.ts';
-const schema: ApiJson = { ... };
+const schema: ValidatedOpenaApiSchema = { ... };
 
 await generateTypesDefinitions(envVarName, outPath, schema);
 ```

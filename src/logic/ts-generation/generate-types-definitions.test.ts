@@ -4,7 +4,7 @@ import { mocked } from 'ts-jest/utils';
 import swaggerJsonWithMissingRouteName from '../../tests-related/mock-data/swagger-with-missing-routename.json';
 import swaggerJson from '../../tests-related/mock-data/swagger.json';
 import { transpileRaw } from '../../tests-related/ts/transpile-raw';
-import { ApiJson } from '../../types/swagger-schema.interfaces';
+import { ValidatedOpenaApiSchema } from '../../types/swagger-schema.interfaces';
 import { generateTypesDefinitions } from './generate-types-definitions';
 
 jest.mock('fs-extra');
@@ -26,13 +26,18 @@ const expectToContainSuccessAndError = (
 
 describe('generateTypesDefinitions function', () => {
   global.console = { error: jest.fn() } as unknown as Console;
-  const json = swaggerJson as unknown as ApiJson;
+  const json = swaggerJson as unknown as ValidatedOpenaApiSchema;
   const outPath = './src/api';
 
   beforeEach(() => jest.clearAllMocks());
 
   it('should generate all the types', async () => {
-    await generateTypesDefinitions('API_URL', outPath, json);
+    const result = await generateTypesDefinitions('API_URL', outPath, json);
+
+    expect(result).toStrictEqual({
+      typesGenerated: true,
+      endpointsCount: 5,
+    });
 
     expect(writeFile).toHaveBeenCalledTimes(6);
     const rawResult = mocked(writeFile).mock.calls[5][1];
@@ -222,10 +227,24 @@ describe('generateTypesDefinitions function', () => {
     await generateTypesDefinitions(
       'API_URL',
       outPath,
-      swaggerJsonWithMissingRouteName as unknown as ApiJson,
+      swaggerJsonWithMissingRouteName as unknown as ValidatedOpenaApiSchema,
     );
 
     expect(console.error).toHaveBeenCalledTimes(1);
     expect(writeFile).toHaveBeenCalledTimes(1);
+  });
+
+  it('should not write anything', async () => {
+    const result = await generateTypesDefinitions('API_URL', outPath, {
+      components: { schemas: {} },
+      paths: [],
+    });
+
+    expect(result).toStrictEqual({
+      typesGenerated: false,
+      endpointsCount: 0,
+    });
+
+    expect(writeFile).toHaveBeenCalledTimes(0);
   });
 });

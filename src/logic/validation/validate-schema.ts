@@ -1,24 +1,33 @@
-import * as openapi from '@apidevtools/openapi-schemas';
-import Ajv from 'ajv-draft-04';
+import { InputSwaggerJson } from '../../types/input-swagger-json.interface';
+import { ValidatedOpenaApiSchema } from '../../types/swagger-schema.interfaces';
+import { displayWarning } from '../cli/console/console.messages';
 
-import { ApiJson } from '../../types/swagger-schema.interfaces';
-import { displayError } from '../cli/console/console.messages';
-
-export const validateSchema = async (rawJson: string): Promise<ApiJson> => {
-  const ajv = new Ajv({
-    allErrors: true,
-    validateFormats: false,
-    strictSchema: false,
-    strictTypes: false,
-  });
-
-  const validate = ajv.compile<ApiJson>(openapi.openapiV3);
-
-  const isValid = validate(rawJson);
-  if (!isValid) {
-    displayError(validate.errors);
-    throw new Error('Invalid schema');
+const validate = (rawJson: InputSwaggerJson): void => {
+  if (!rawJson.components?.schemas) {
+    throw new Error(
+      `Schema validation failure: missing components.schemas property`,
+    );
+  }
+  if (Object.keys(rawJson.components.schemas).length === 0) {
+    displayWarning(
+      'This api definition does not expose any schema. No types will be generated',
+    );
   }
 
-  return rawJson as unknown as ApiJson;
+  if (!rawJson.paths) {
+    throw new Error(`Schema validation failure: missing paths property`);
+  }
+  if (Object.keys(rawJson.paths).length === 0) {
+    throw new Error(
+      `This api definition does not expose any endpoint. Nothing to generate`,
+    );
+  }
+};
+
+export const validateSchema = async (
+  rawJson: InputSwaggerJson,
+): Promise<ValidatedOpenaApiSchema> => {
+  validate(rawJson);
+
+  return rawJson as unknown as ValidatedOpenaApiSchema;
 };

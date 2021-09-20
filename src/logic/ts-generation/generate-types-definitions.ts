@@ -1,6 +1,7 @@
 import { writeFile, ensureDir } from 'fs-extra';
 
-import { ApiJson } from '../../types/swagger-schema.interfaces';
+import { GenerationResult } from '../../types/generation-result.interface';
+import { ValidatedOpenaApiSchema } from '../../types/swagger-schema.interfaces';
 import { displayWarning } from '../cli/console/console.messages';
 import { getExposedEndpoints } from '../json-parsing/get-exposed-endpoints';
 import { getRoutePath } from '../json-parsing/get-route-path';
@@ -14,11 +15,12 @@ import { getRouteOutputsExports } from './get-route-outputs-exports';
 export const generateTypesDefinitions = async (
   envVarName: string,
   outPath: string,
-  json: ApiJson,
-): Promise<void> => {
+  json: ValidatedOpenaApiSchema,
+): Promise<GenerationResult> => {
   const typesDefinition = getTypesDefinitions(json.components.schemas);
   const endpoints = getExposedEndpoints(json);
 
+  let endpointsCount = 0;
   for (const {
     id,
     path: rawPath,
@@ -44,6 +46,7 @@ export const generateTypesDefinitions = async (
     const outputExports = getRouteOutputsExports(routeName, responses);
     const doc = getJsDoc(id, verb, summary, description);
 
+    endpointsCount++;
     await writeFile(
       `${controllerPath}/${routeName}.ts`,
       `${doc}\n\nimport { ${models.join(
@@ -52,5 +55,9 @@ export const generateTypesDefinitions = async (
     );
   }
 
-  await writeFile(`${outPath}/api-types.ts`, typesDefinition);
+  if (typesDefinition.length > 0) {
+    await writeFile(`${outPath}/api-types.ts`, typesDefinition);
+  }
+
+  return { typesGenerated: typesDefinition.length > 0, endpointsCount };
 };

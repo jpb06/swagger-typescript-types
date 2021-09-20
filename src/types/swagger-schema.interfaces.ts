@@ -1,4 +1,4 @@
-export interface ApiJson {
+export interface ValidatedOpenaApiSchema {
   paths: Array<ApiPath>;
   components: {
     schemas: ApiSchemas;
