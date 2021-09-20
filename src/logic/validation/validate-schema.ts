@@ -1,8 +1,8 @@
-import { SwaggerJson } from '../../types/swagger-json.interface';
-import { ApiJson } from '../../types/swagger-schema.interfaces';
+import { InputSwaggerJson } from '../../types/input-swagger-json.interface';
+import { ValidatedOpenaApiSchema } from '../../types/swagger-schema.interfaces';
 import { displayWarning } from '../cli/console/console.messages';
 
-const validate = (rawJson: SwaggerJson): void => {
+const validate = (rawJson: InputSwaggerJson): void => {
   if (!rawJson.components?.schemas) {
     throw new Error(
       `Schema validation failure: missing components.schemas property`,
@@ -25,9 +25,9 @@ const validate = (rawJson: SwaggerJson): void => {
 };
 
 export const validateSchema = async (
-  rawJson: SwaggerJson,
-): Promise<ApiJson> => {
+  rawJson: InputSwaggerJson,
+): Promise<ValidatedOpenaApiSchema> => {
   validate(rawJson);
 
-  return rawJson as unknown as ApiJson;
+  return rawJson as unknown as ValidatedOpenaApiSchema;
 };

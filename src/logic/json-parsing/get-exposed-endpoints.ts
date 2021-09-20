@@ -1,5 +1,5 @@
 import {
-  ApiJson,
+  ValidatedOpenaApiSchema,
   ApiRouteParameter,
 } from '../../types/swagger-schema.interfaces';
 import { BodyModel, getBodyModel } from './get-body-model';
@@ -16,7 +16,9 @@ export interface Route {
   responses: Array<RouteResponse>;
 }
 
-export const getExposedEndpoints = (json: ApiJson): Array<Route> => {
+export const getExposedEndpoints = (
+  json: ValidatedOpenaApiSchema,
+): Array<Route> => {
   const routes: Array<Route> = [];
 
   for (const [path, verbs] of Object.entries(json.paths)) {

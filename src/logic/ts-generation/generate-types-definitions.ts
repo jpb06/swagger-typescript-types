@@ -1,7 +1,7 @@
 import { writeFile, ensureDir } from 'fs-extra';
 
 import { GenerationResult } from '../../types/generation-result.interface';
-import { ApiJson } from '../../types/swagger-schema.interfaces';
+import { ValidatedOpenaApiSchema } from '../../types/swagger-schema.interfaces';
 import { displayWarning } from '../cli/console/console.messages';
 import { getExposedEndpoints } from '../json-parsing/get-exposed-endpoints';
 import { getRoutePath } from '../json-parsing/get-route-path';
@@ -15,7 +15,7 @@ import { getRouteOutputsExports } from './get-route-outputs-exports';
 export const generateTypesDefinitions = async (
   envVarName: string,
   outPath: string,
-  json: ApiJson,
+  json: ValidatedOpenaApiSchema,
 ): Promise<GenerationResult> => {
   const typesDefinition = getTypesDefinitions(json.components.schemas);
   const endpoints = getExposedEndpoints(json);

@@ -1,4 +1,4 @@
-export interface SwaggerJson {
+export interface InputSwaggerJson {
   openapi?: string;
   info?: unknown;
   tags?: Array<string>;
