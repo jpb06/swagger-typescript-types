@@ -1,12 +1,15 @@
-import chalk from 'chalk';
-
 import {
   ApiRouteParameter,
   ApiTypeDefinition,
 } from '../../types/swagger-schema.interfaces';
+import { displayWarning } from '../cli/console/console.messages';
 import { getSchemaName } from './get-schema-name';
 
-const getModel = (name: string, schema: ApiTypeDefinition): string => {
+const getModel = (
+  operationId: string,
+  name: string,
+  schema: ApiTypeDefinition,
+): string => {
   if (schema.$ref) {
     return getSchemaName(schema.$ref);
   }
@@ -19,10 +22,9 @@ const getModel = (name: string, schema: ApiTypeDefinition): string => {
         return `Array<${schema.items.type}>`;
       }
 
-      console.error(
-        chalk.redBright(
-          `Unable to extract type from ${name}; given array without $ref or type`,
-        ),
+      displayWarning(
+        `Unable to extract type from ${name}; given array without $ref or type`,
+        operationId,
       );
       return 'undefined';
     }
@@ -30,15 +32,15 @@ const getModel = (name: string, schema: ApiTypeDefinition): string => {
     return schema.type;
   }
 
-  console.error(
-    chalk.redBright(
-      `Unable to extract type from ${name}; no $ref or type provided`,
-    ),
+  displayWarning(
+    `Unable to extract type from ${name}; no $ref or type provided`,
+    operationId,
   );
   return 'undefined';
 };
 
 export const getRoutePath = (
+  routeName: string,
   envVarName: string,
   rawPath: string,
   parameters: Array<ApiRouteParameter>,
@@ -54,7 +56,7 @@ export const getRoutePath = (
   const functionParameters = pathParameters.reduce<Array<string>>(
     (output, { name, required, schema }) => {
       const paramName = `${name}${required ? '' : '?'}`;
-      const model = getModel(name, schema);
+      const model = getModel(routeName, name, schema);
 
       return [...output, `${paramName}: ${model}`];
     },
