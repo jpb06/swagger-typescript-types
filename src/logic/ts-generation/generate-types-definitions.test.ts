@@ -1,6 +1,7 @@
 import { writeFile } from 'fs-extra';
 import { mocked } from 'ts-jest/utils';
 
+import swaggerJsonWithMissingRouteName from '../../tests-related/mock-data/swagger-with-missing-routename.json';
 import swaggerJson from '../../tests-related/mock-data/swagger.json';
 import { transpileRaw } from '../../tests-related/ts/transpile-raw';
 import { ApiJson } from '../../types/swagger-schema.interfaces';
@@ -13,17 +14,18 @@ const expectWriteFileCallToContain = (index: number, regex: RegExp): void => {
   expect(rawResult).toMatch(regex);
 };
 
-const expectWriteFileCallToMatchTimes = (
+const expectToContainSuccessAndError = (
   index: number,
-  regex: RegExp,
-  count: number,
+  successExport: string,
+  errorExport: string,
 ): void => {
   const rawResult = mocked(writeFile).mock.calls[index][1];
-  const arr = (rawResult as string).match(regex) || [];
-  expect(arr).toHaveLength(count);
+  expect(rawResult).toContain(successExport);
+  expect(rawResult).toContain(errorExport);
 };
 
 describe('generateTypesDefinitions function', () => {
+  global.console = { error: jest.fn() } as unknown as Console;
   const json = swaggerJson as unknown as ApiJson;
   const outPath = './src/api';
 
@@ -171,12 +173,31 @@ describe('generateTypesDefinitions function', () => {
 
     expect(writeFile).toHaveBeenCalledTimes(6);
 
-    const exportsRegex = /(.*export type Response[0-9]{3} = .*;)/g;
-    expectWriteFileCallToMatchTimes(0, exportsRegex, 3);
-    expectWriteFileCallToMatchTimes(1, exportsRegex, 3);
-    expectWriteFileCallToMatchTimes(2, exportsRegex, 3);
-    expectWriteFileCallToMatchTimes(3, exportsRegex, 3);
-    expectWriteFileCallToMatchTimes(4, exportsRegex, 3);
+    expectToContainSuccessAndError(
+      0,
+      'export type LoginSuccess = LoginResultDto;',
+      'export type LoginError = ApiResponseDto;',
+    );
+    expectToContainSuccessAndError(
+      1,
+      'export type GetChaptersWithMembersSuccess = ChaptersWithMembersResultDto;',
+      'export type GetChaptersWithMembersError = ApiResponseDto;',
+    );
+    expectToContainSuccessAndError(
+      2,
+      'export type GetSubjectsSuccess = SubjectsResultDto;',
+      'export type GetSubjectsError = ApiResponseDto;',
+    );
+    expectToContainSuccessAndError(
+      3,
+      'export type GetChaptersSubjectsSuccess = SubjectsResultDto;',
+      'export type GetChaptersSubjectsError = ApiResponseDto;',
+    );
+    expectToContainSuccessAndError(
+      4,
+      'export type CreateSubjectSuccess = CreateSubjectResultDto;',
+      'export type CreateSubjectError = ApiResponseDto;',
+    );
   });
 
   it('should export the request body type if any', async () => {
@@ -195,5 +216,16 @@ describe('generateTypesDefinitions function', () => {
     const rawResult = mocked(writeFile).mock.calls[5][1];
     const transpilationResult = await transpileRaw(rawResult);
     expect(transpilationResult).toHaveLength(0);
+  });
+
+  it('should display a warning if route has no name', async () => {
+    await generateTypesDefinitions(
+      'API_URL',
+      outPath,
+      swaggerJsonWithMissingRouteName as unknown as ApiJson,
+    );
+
+    expect(console.error).toHaveBeenCalledTimes(1);
+    expect(writeFile).toHaveBeenCalledTimes(1);
   });
 });
