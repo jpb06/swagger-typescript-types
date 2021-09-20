@@ -1,6 +1,7 @@
 import { fetchSwaggerJson } from '../logic/fetching/fetch-swagger-json-file';
 import { generateTypesDefinitions } from '../logic/ts-generation/generate-types-definitions';
 import { validateSchema } from '../logic/validation/validate-schema';
+import { GenerationResult } from '../types/generation-result.interface';
 
 export type GenerateTypesFromUrlArguments = {
   apiUrl: string;
@@ -14,9 +15,9 @@ export const generateTypesFromUrl = async ({
   apiJsonPath,
   outPath,
   envVarName,
-}: GenerateTypesFromUrlArguments): Promise<void> => {
+}: GenerateTypesFromUrlArguments): Promise<GenerationResult> => {
   const data = await fetchSwaggerJson(`${apiUrl}/${apiJsonPath}`);
   const schema = await validateSchema(data);
 
-  await generateTypesDefinitions(envVarName, outPath, schema);
+  return generateTypesDefinitions(envVarName, outPath, schema);
 };

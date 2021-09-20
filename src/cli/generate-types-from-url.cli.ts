@@ -13,9 +13,9 @@ import { generateTypesFromUrl } from '../workflows/generate-types-from-url';
   try {
     const args = validateArguments();
 
-    await generateTypesFromUrl(args);
+    const generationResult = await generateTypesFromUrl(args);
 
-    displaySuccess(args.outPath);
+    displaySuccess(args.outPath, generationResult);
     process.exit(0);
   } catch (err) {
     displayError(err);
