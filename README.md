@@ -55,18 +55,18 @@ Knowing this, we can add a script to our package.json:
 ```json
 {
   "scripts": {
-    "api:sync": "generateTypesFromUrl API_URL -json ./src/types/api.types.ts"
+    "api:sync": "generateTypesFromUrl API_URL -json ./src/api/types"
   }
 }
 ```
 
 The `generateTypesFromUrl` task takes tree arguments:
 
-| #   | description                                                            | Example                  |
-| --- | ---------------------------------------------------------------------- | ------------------------ |
-| 1️⃣  | The name of an environment variable containing the path to our backend | API_URL                  |
-| 2️⃣  | The path to the json exposed by swagger on our backend                 | -json                    |
-| 3️⃣  | Where to write our extracted types                                     | ./src/types/api.types.ts |
+| #   | description                                                            | Example         |
+| --- | ---------------------------------------------------------------------- | --------------- |
+| 1️⃣  | The name of an environment variable containing the path to our backend | API_URL         |
+| 2️⃣  | The path to the json exposed by swagger on our backend                 | -json           |
+| 3️⃣  | Where to write our extracted types                                     | ./src/api/types |
 
 Our task will do a few things using these arguments when called:
 
