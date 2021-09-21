@@ -164,7 +164,7 @@ This function extracts models from the swagger json and generates typings from t
 
 ```typescript
 const enVarName = 'API_URL';
-const outPath = './src/api.types.ts';
+const outPath = './src/api/types';
 const schema: ValidatedOpenaApiSchema = { ... };
 
 await generateTypesDefinitions(envVarName, outPath, schema);
