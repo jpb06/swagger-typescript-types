@@ -1,9 +1,11 @@
 # swagger-typescript-types
 
 [![Open in Visual Studio Code](https://open.vscode.dev/badges/open-in-vscode.svg)](https://open.vscode.dev/jpb06/swagger-typescript-types)
+![npm bundle size](https://img.shields.io/bundlephobia/min/swagger-typescript-types)
 [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=jpb06_swagger-typescript-types&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=jpb06_swagger-typescript-types)
 [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=jpb06_swagger-typescript-types&metric=security_rating)](https://sonarcloud.io/dashboard?id=jpb06_swagger-typescript-types)
 [![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=jpb06_swagger-typescript-types&metric=reliability_rating)](https://sonarcloud.io/dashboard?id=jpb06_swagger-typescript-types)
+![Snyk Vulnerabilities for npm package](https://img.shields.io/snyk/vulnerabilities/npm/swagger-typescript-types?label=snyk%20vulnerabilities)
 [![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=jpb06_swagger-typescript-types&metric=code_smells)](https://sonarcloud.io/dashboard?id=jpb06_swagger-typescript-types)
 [![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=jpb06_swagger-typescript-types&metric=duplicated_lines_density)](https://sonarcloud.io/dashboard?id=jpb06_swagger-typescript-types)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=jpb06_swagger-typescript-types&metric=coverage)](https://sonarcloud.io/dashboard?id=jpb06_swagger-typescript-types)
