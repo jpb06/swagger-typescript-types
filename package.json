@@ -18,7 +18,6 @@
   },
   "devDependencies": {
     "@ts-morph/bootstrap": "^0.11.0",
-    "@types/axios": "^0.14.0",
     "@types/dotenv-flow": "^3.2.0",
     "@types/fs-extra": "^9.0.12",
     "@types/jest": "^27.0.1",
@@ -33,6 +32,7 @@
     "eslint-plugin-jest": "^24.4.2",
     "eslint-plugin-prettier": "^4.0.0",
     "jest": "^27.2.0",
+    "jest-watch-typeahead": "^1.0.0",
     "prettier": "^2.4.1",
     "ts-jest": "^27.0.5",
     "typescript": "^4.3.5"
@@ -42,7 +42,7 @@
     "copy-readme": "copyfiles README.md ./dist/",
     "build": "del-cli ./dist && tsc --project tsconfig.prod.json",
     "postbuild": "yarn copy-package && yarn copy-readme",
-    "test": "jest ---watch",
+    "test": "jest --watch",
     "test:dev": "jest --coverage --watchAll",
     "test:silentcov": "jest --coverage --silent --runInBand --watchAll=false",
     "test:ci": "jest --ci --coverage",
