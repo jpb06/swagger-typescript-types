@@ -28,7 +28,7 @@ jobs:
       - name: Setup node
         uses: actions/setup-node@v2
         with:
-          node-version: '14.x'
+          node-version: '16.x'
           registry-url: 'https://registry.npmjs.org'
 
       - name: Setting yarn version
@@ -44,7 +44,7 @@ jobs:
         uses: jpb06/jest-badges-action@v1.7.0
 
       - name: Bump package version
-        uses: jpb06/bump-package@v2.3.0
+        uses: jpb06/bump-package@v2.4.0
 
       - name: Building package
         run: yarn build
