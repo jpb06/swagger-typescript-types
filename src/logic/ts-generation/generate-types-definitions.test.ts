@@ -1,5 +1,5 @@
 import { writeFile } from 'fs-extra';
-import { mocked } from 'ts-jest/utils';
+import { mocked } from 'jest-mock';
 
 import swaggerJsonWithMissingRouteName from '../../tests-related/mock-data/swagger-with-missing-routename.json';
 import swaggerJson from '../../tests-related/mock-data/swagger.json';
