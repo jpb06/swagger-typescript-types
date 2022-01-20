@@ -173,7 +173,7 @@ describe('generateTypesDefinitions function', () => {
     expectWriteFileCallToContain(4, jsDocRegex);
   });
 
-  it('should export on type by response', async () => {
+  it('should export one type by response', async () => {
     await generateTypesDefinitions('API_URL', outPath, json);
 
     expect(writeFile).toHaveBeenCalledTimes(6);
