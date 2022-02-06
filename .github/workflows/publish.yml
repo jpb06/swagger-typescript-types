@@ -1,14 +1,20 @@
 name: Coverage badges generation & publish
+
 on:
   push:
     branches:
       - master
+
 jobs:
   install:
-    name: Install dependencies
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
+      - name: Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.9.1
+        with:
+          access_token: ${{ github.token }}
+
       - name: Check out repository code
         uses: actions/checkout@v2
 
@@ -32,7 +38,7 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
 
       - name: Setting yarn version
-        run: yarn policies set-version 1.22.10
+        run: yarn policies set-version 1.22.17
 
       - name: Install dependencies
         run: yarn install --prefer-offline
@@ -41,10 +47,10 @@ jobs:
         run: yarn test:ci
 
       - name: Generating coverage badges
-        uses: jpb06/jest-badges-action@v1.7.0
+        uses: jpb06/jest-badges-action@v1.8.7
 
       - name: Bump package version
-        uses: jpb06/bump-package@v2.4.0
+        uses: jpb06/bump-package@v2.4.4
 
       - name: Building package
         run: yarn build
