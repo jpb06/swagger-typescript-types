@@ -1,6 +1,6 @@
 # swagger-typescript-types
 
-[![Open in Visual Studio Code](https://open.vscode.dev/badges/open-in-vscode.svg)](https://open.vscode.dev/jpb06/swagger-typescript-types)
+[![Open in Visual Studio Code](https://img.shields.io/static/v1?logo=visualstudiocode&label=&message=Open%20in%20Visual%20Studio%20Code&labelColor=2c2c32&color=007acc&logoColor=007acc)](https://github.dev/jpb06/swagger-typescript-types)
 ![npm bundle size](https://img.shields.io/bundlephobia/min/swagger-typescript-types)
 ![Github workflow](https://img.shields.io/github/workflow/status/jpb06/swagger-typescript-types/Main%20workflow?label=Tests&logo=github-actions)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=jpb06_swagger-typescript-types&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=jpb06_swagger-typescript-types)
