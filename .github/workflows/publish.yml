@@ -57,7 +57,7 @@ jobs:
         run: yarn build
 
       - name: Publish package
-        if: steps.bumping-version.outputs.bump-performed == 'True'
+        if: steps.bumping-version.outputs.bump-performed == 'true'
         run: |
           cd dist
           yarn publish --non-interactive
