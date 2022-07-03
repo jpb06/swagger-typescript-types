@@ -1,10 +1,9 @@
 import dotenv from 'dotenv-flow';
 
-import { GenerateTypesFromUrlArguments } from '../../../workflows/generate-types-from-url';
-import { urlRegex } from '../url-regex';
+import { GenerateTypesFromUrlArguments } from '../../workflows/generate-types-from-url';
 import { getProcessArguments } from './process-argv.indirection';
 
-export const validateArguments = (): GenerateTypesFromUrlArguments => {
+export const validateUrlArguments = (): GenerateTypesFromUrlArguments => {
   dotenv.config({ silent: true });
   const args = getProcessArguments();
   if (args.length !== 3) {
@@ -18,14 +17,16 @@ export const validateArguments = (): GenerateTypesFromUrlArguments => {
   const outPath = args[2];
 
   const apiUrl = process.env[envVarName];
-  if (!apiUrl || apiUrl === 'undefined') {
+  if (!apiUrl || apiUrl === 'never') {
     throw new Error(
       'Expecting the name of an environement variable as first parameter. This env var should contain an url to the swagger json to parse',
     );
   }
+
+  const urlRegex = /^(https?|chrome):\/\/[^\s$.?#].[^\s]*$/;
   if (!urlRegex.test(apiUrl)) {
     throw new Error(
-      'Expecting an url as value from the environement variable provided. Example: https://cool.org/mySwagger/json',
+      'Expecting an url as value from the environement variable provided. Example: https://cool.org/mySwagger',
     );
   }
 

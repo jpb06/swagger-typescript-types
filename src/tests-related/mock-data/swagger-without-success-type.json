@@ -1,0 +1,35 @@
+{
+  "openapi": "3.0.0",
+  "paths": {
+    "/authentication/login": {
+      "post": {
+        "operationId": "AuthenticationController_login",
+        "summary": "Login route",
+        "description": "Authenticates a user from his google auth token",
+        "responses": {},
+        "parameters": [],
+        "tags": [
+          "Users"
+        ]
+      }
+    }
+  },
+  "info": {
+    "title": "Backend sandbox",
+    "description": "The backend sandbox description",
+    "version": "1.0",
+    "contact": {}
+  },
+  "tags": [],
+  "servers": [],
+  "components": {
+    "securitySchemes": {
+      "bearer": {
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "type": "http"
+      }
+    },
+    "schemas": {}
+  }
+}

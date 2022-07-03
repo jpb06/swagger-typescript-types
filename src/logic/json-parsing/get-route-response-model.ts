@@ -31,13 +31,10 @@ export const getRouteResponseModel = (
       };
     }
 
-    displayWarning(
-      `Unable to extract type for response ${statusCode}; given array without $ref or type`,
-      operationId,
-    );
+    displayWarning(`No type provided for response ${statusCode}`, operationId);
     return {
       statusCode,
-      model: 'undefined',
+      model: 'never',
       isPrimitiveModel: true,
     };
   } else if (type) {
@@ -48,13 +45,10 @@ export const getRouteResponseModel = (
     };
   }
 
-  displayWarning(
-    `Unable to extract type for response ${statusCode}; no $ref or type provided`,
-    operationId,
-  );
+  displayWarning(`No type provided for response ${statusCode}`, operationId);
   return {
     statusCode,
-    model: 'undefined',
+    model: 'never',
     isPrimitiveModel: true,
   };
 };

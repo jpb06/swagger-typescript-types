@@ -28,7 +28,7 @@ export const displaySuccess = (
 export const displayError = (err: unknown): void => {
   console.error(
     `${chalk.cyanBright('swagger-typescript-types')} ❌ - ${chalk.redBright(
-      (err as { message: string }).message,
+      (err as { stack: string }).stack,
     )}`,
   );
 };

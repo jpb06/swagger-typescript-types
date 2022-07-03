@@ -26,7 +26,7 @@ const getModel = (
         `Unable to extract type from ${name}; given array without $ref or type`,
         operationId,
       );
-      return 'undefined';
+      return 'never';
     }
 
     return schema.type;
@@ -36,21 +36,28 @@ const getModel = (
     `Unable to extract type from ${name}; no $ref or type provided`,
     operationId,
   );
-  return 'undefined';
+  return 'never';
 };
 
 export const getRoutePath = (
+  id: string,
   routeName: string,
-  envVarName: string,
   rawPath: string,
   parameters: Array<ApiRouteParameter>,
 ): string => {
-  const root = '${process.env.' + envVarName + '}';
   const pathParameters = parameters.filter((el) => el.in === 'path');
   const path = rawPath.replace(/{/g, '${');
 
+  const urlParametersCount = (rawPath.match(/\{\w*\}/g) || []).length;
+  if (urlParametersCount !== pathParameters.length) {
+    displayWarning(
+      `Missing path param(s). Expecting ${urlParametersCount} bug got ${pathParameters.length}`,
+      id,
+    );
+  }
+
   if (pathParameters.length === 0) {
-    return `export const path = \`${root}${path}\`;`;
+    return `export const path = \`${path}\`;`;
   }
 
   const functionParameters = pathParameters.reduce<Array<string>>(
@@ -65,5 +72,5 @@ export const getRoutePath = (
 
   return `export const getPath = (${functionParameters.join(
     ', ',
-  )}): string => \`${root}${path}\`;`;
+  )}): string => \`${path}\`;`;
 };

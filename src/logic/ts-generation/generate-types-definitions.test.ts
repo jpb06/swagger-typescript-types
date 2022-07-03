@@ -2,6 +2,8 @@ import { writeFile } from 'fs-extra';
 import { mocked } from 'jest-mock';
 
 import swaggerJsonWithMissingRouteName from '../../tests-related/mock-data/swagger-with-missing-routename.json';
+import swaggerWithoutSuccessTypeJson from '../../tests-related/mock-data/swagger-without-success-type.json';
+import swaggerWithoutTypesJson from '../../tests-related/mock-data/swagger-without-types.json';
 import swaggerJson from '../../tests-related/mock-data/swagger.json';
 import { transpileRaw } from '../../tests-related/ts/transpile-raw';
 import { ValidatedOpenaApiSchema } from '../../types/swagger-schema.interfaces';
@@ -32,7 +34,7 @@ describe('generateTypesDefinitions function', () => {
   beforeEach(() => jest.clearAllMocks());
 
   it('should generate all the types', async () => {
-    const result = await generateTypesDefinitions('API_URL', outPath, json);
+    const result = await generateTypesDefinitions(outPath, json);
 
     expect(result).toStrictEqual({
       typesGenerated: true,
@@ -40,24 +42,28 @@ describe('generateTypesDefinitions function', () => {
     });
 
     expect(writeFile).toHaveBeenCalledTimes(6);
-    const rawResult = mocked(writeFile).mock.calls[5][1];
-    const interfaces = (rawResult as string)
+    const rawResult = mocked(writeFile).mock.calls[5][1] as string;
+
+    expect(
+      rawResult.startsWith('/* eslint-disable */\n/* tslint:disable */\n\n'),
+    ).toBeTruthy();
+
+    const exports = rawResult
+      .split('/* eslint-disable */\n/* tslint:disable */\n\n')[1]
       .split('export ')
       .filter((el) => el !== '');
 
-    expect(interfaces[0]).toBe(
-      'interface LoginBodyDto {\n  token: string;\n}\n',
-    );
-    expect(interfaces[1]).toBe(
+    expect(exports[0]).toBe('interface LoginBodyDto {\n  token: string;\n}\n');
+    expect(exports[1]).toBe(
       'interface LoginResultDataDto {\n  token: string;\n}\n',
     );
-    expect(interfaces[2]).toBe(
+    expect(exports[2]).toBe(
       'interface LoginResultDto {\n  data: LoginResultDataDto;\n}\n',
     );
-    expect(interfaces[3]).toBe(
+    expect(exports[3]).toBe(
       'interface ApiResponseDto {\n  statusCode: number;\n  message: string;\n}\n',
     );
-    expect(interfaces[4]).toBe(
+    expect(exports[4]).toBe(
       'interface ChapterMemberDto {\n' +
         '  idUser: number;\n' +
         '  userFullName: string;\n' +
@@ -66,19 +72,19 @@ describe('generateTypesDefinitions function', () => {
         '  role?: string;\n' +
         '}\n',
     );
-    expect(interfaces[5]).toBe(
+    expect(exports[5]).toBe(
       'interface ChapterWithMembersDto {\n' +
         '  id: number;\n' +
         '  name: string;\n' +
         '  members: Array<ChapterMemberDto>;\n' +
         '}\n',
     );
-    expect(interfaces[6]).toBe(
+    expect(exports[6]).toBe(
       'interface ChaptersWithMembersResultDto {\n' +
         '  data: Array<ChapterWithMembersDto>;\n' +
         '}\n',
     );
-    expect(interfaces[7]).toBe(
+    expect(exports[7]).toBe(
       'interface DiscussionDto {\n' +
         '  id: number;\n' +
         '  idUser: number;\n' +
@@ -89,7 +95,7 @@ describe('generateTypesDefinitions function', () => {
         '  createdAt: string;\n' +
         '}\n',
     );
-    expect(interfaces[8]).toBe(
+    expect(exports[8]).toBe(
       'interface SubjectWithDiscussionsDto {\n' +
         '  id: number;\n' +
         '  title: string;\n' +
@@ -103,10 +109,10 @@ describe('generateTypesDefinitions function', () => {
         '  discussion: Array<DiscussionDto>;\n' +
         '}\n',
     );
-    expect(interfaces[9]).toBe(
+    expect(exports[9]).toBe(
       'interface SubjectsResultDto {\n  data: Array<SubjectWithDiscussionsDto>;\n}\n',
     );
-    expect(interfaces[10]).toBe(
+    expect(exports[10]).toBe(
       'interface NewSubjectDto {\n' +
         '  idChapter: number;\n' +
         '  title: string;\n' +
@@ -114,7 +120,7 @@ describe('generateTypesDefinitions function', () => {
         '  link: string;\n' +
         '}\n',
     );
-    expect(interfaces[11]).toBe(
+    expect(exports[11]).toBe(
       'interface SubjectDto {\n' +
         '  id: number;\n' +
         '  title: string;\n' +
@@ -127,18 +133,18 @@ describe('generateTypesDefinitions function', () => {
         '  chapterName: string;\n' +
         '}\n',
     );
-    expect(interfaces[12]).toBe(
+    expect(exports[12]).toBe(
       'interface CreateSubjectResultDto {\n  data: SubjectDto;\n}\n',
     );
   });
 
   it('should export one path variable by exposed endpoint', async () => {
-    await generateTypesDefinitions('API_URL', outPath, json);
+    await generateTypesDefinitions(outPath, json);
 
     expect(writeFile).toHaveBeenCalledTimes(6);
 
     const pathExportRegex =
-      /(export const path = `\${process\.env\.API_URL}.*`;)|(export const getPath = (.*) => `\${process\.env\.API_URL}.*`;)/;
+      /(export const path = `.*`;)|(export const getPath = (.*) => `.*`;)/;
     expectWriteFileCallToContain(0, pathExportRegex);
     expectWriteFileCallToContain(1, pathExportRegex);
     expectWriteFileCallToContain(2, pathExportRegex);
@@ -147,7 +153,7 @@ describe('generateTypesDefinitions function', () => {
   });
 
   it('should import related types for each exposed endpoint', async () => {
-    await generateTypesDefinitions('API_URL', outPath, json);
+    await generateTypesDefinitions(outPath, json);
 
     expect(writeFile).toHaveBeenCalledTimes(6);
 
@@ -159,8 +165,34 @@ describe('generateTypesDefinitions function', () => {
     expectWriteFileCallToContain(4, reExportingRegex);
   });
 
+  it('should not include the api-types import', async () => {
+    await generateTypesDefinitions(
+      outPath,
+      swaggerWithoutTypesJson as unknown as ValidatedOpenaApiSchema,
+    );
+
+    expect(writeFile).toHaveBeenCalledTimes(1);
+    expect(mocked(writeFile).mock.calls.join('')).not.toContain(
+      `from './../api-types';`,
+    );
+  });
+
+  it('should set success and error types as never', async () => {
+    await generateTypesDefinitions(
+      outPath,
+      swaggerWithoutSuccessTypeJson as unknown as ValidatedOpenaApiSchema,
+    );
+
+    expect(writeFile).toHaveBeenCalledTimes(1);
+
+    const output = mocked(writeFile).mock.calls.join('');
+
+    expect(output).toContain('export type LoginSuccess = never;');
+    expect(output).toContain('export type LoginError = never;');
+  });
+
   it('should generate jsdoc for each endpoint', async () => {
-    await generateTypesDefinitions('API_URL', outPath, json);
+    await generateTypesDefinitions(outPath, json);
 
     expect(writeFile).toHaveBeenCalledTimes(6);
 
@@ -174,7 +206,7 @@ describe('generateTypesDefinitions function', () => {
   });
 
   it('should export one type by response', async () => {
-    await generateTypesDefinitions('API_URL', outPath, json);
+    await generateTypesDefinitions(outPath, json);
 
     expect(writeFile).toHaveBeenCalledTimes(6);
 
@@ -206,7 +238,7 @@ describe('generateTypesDefinitions function', () => {
   });
 
   it('should export the request body type if any', async () => {
-    await generateTypesDefinitions('API_URL', outPath, json);
+    await generateTypesDefinitions(outPath, json);
 
     expect(writeFile).toHaveBeenCalledTimes(6);
 
@@ -215,7 +247,7 @@ describe('generateTypesDefinitions function', () => {
   });
 
   it('should generate valid typescript for types', async () => {
-    await generateTypesDefinitions('API_URL', outPath, json);
+    await generateTypesDefinitions(outPath, json);
 
     expect(writeFile).toHaveBeenCalledTimes(6);
     const rawResult = mocked(writeFile).mock.calls[5][1];
@@ -225,7 +257,6 @@ describe('generateTypesDefinitions function', () => {
 
   it('should display a warning if route has no name', async () => {
     await generateTypesDefinitions(
-      'API_URL',
       outPath,
       swaggerJsonWithMissingRouteName as unknown as ValidatedOpenaApiSchema,
     );
@@ -235,7 +266,7 @@ describe('generateTypesDefinitions function', () => {
   });
 
   it('should not write anything', async () => {
-    const result = await generateTypesDefinitions('API_URL', outPath, {
+    const result = await generateTypesDefinitions(outPath, {
       components: { schemas: {} },
       paths: [],
     });

@@ -16,24 +16,26 @@ export const getRouteResponses = (
 ): Array<RouteResponse> => {
   const routeResponses: Array<RouteResponse> = [];
 
-  for (const [
-    statusCode,
-    {
-      content: {
-        'application/json': { schema },
-      },
-    },
-  ] of Object.entries(responses)) {
-    if ('oneOf' in schema) {
-      routeResponses.push(
-        ...schema.oneOf.map((el) =>
-          getRouteResponseModel(operationId, el, statusCode),
-        ),
-      );
+  for (const [statusCode, { content }] of Object.entries(responses)) {
+    if (
+      content &&
+      content['application/json'] &&
+      content['application/json'].schema
+    ) {
+      const schema = content['application/json'].schema;
+      if ('oneOf' in schema) {
+        routeResponses.push(
+          ...schema.oneOf.map((el) =>
+            getRouteResponseModel(operationId, el, statusCode),
+          ),
+        );
+      } else {
+        routeResponses.push(
+          getRouteResponseModel(operationId, schema, statusCode),
+        );
+      }
     } else {
-      routeResponses.push(
-        getRouteResponseModel(operationId, schema, statusCode),
-      );
+      routeResponses.push(getRouteResponseModel(operationId, {}, statusCode));
     }
   }
 

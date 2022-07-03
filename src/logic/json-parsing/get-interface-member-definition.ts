@@ -41,7 +41,9 @@ export const getInterfaceMemberDefinition = (
   required: Array<string>,
   property: ApiConditionalUnionTypeDefinition,
 ): string => {
-  const prop = `  ${propName}${required.includes(propName) ? '' : '?'}`;
+  const prop = `  ${propName}${
+    required && required.includes(propName) ? '' : '?'
+  }`;
 
   if ('oneOf' in property) {
     return `${prop}: ${property.oneOf
