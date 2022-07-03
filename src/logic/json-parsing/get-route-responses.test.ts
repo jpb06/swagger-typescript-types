@@ -1,3 +1,4 @@
+import { ApiContent } from '../../types/swagger-schema.interfaces';
 import { getRouteResponses } from './get-route-responses';
 
 describe('getRouteResponses function', () => {
@@ -110,7 +111,21 @@ describe('getRouteResponses function', () => {
     expect(result).toHaveLength(1);
     expect(result[0]).toStrictEqual({
       statusCode: '200',
-      model: 'undefined',
+      model: 'never',
+      isPrimitiveModel: true,
+    });
+    expect(console.error).toHaveBeenCalledTimes(1);
+  });
+
+  it('should warn when type could not be extracted at all (no application/json)', () => {
+    const result = getRouteResponses('cool', {
+      '200': {} as ApiContent,
+    });
+
+    expect(result).toHaveLength(1);
+    expect(result[0]).toStrictEqual({
+      statusCode: '200',
+      model: 'never',
       isPrimitiveModel: true,
     });
     expect(console.error).toHaveBeenCalledTimes(1);
@@ -133,7 +148,7 @@ describe('getRouteResponses function', () => {
     expect(result).toHaveLength(1);
     expect(result[0]).toStrictEqual({
       statusCode: '200',
-      model: 'undefined',
+      model: 'never',
       isPrimitiveModel: true,
     });
     expect(console.error).toHaveBeenCalledTimes(1);

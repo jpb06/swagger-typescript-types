@@ -13,7 +13,6 @@ import { getRouteModels } from './get-route-models';
 import { getRouteOutputsExports } from './get-route-outputs-exports';
 
 export const generateTypesDefinitions = async (
-  envVarName: string,
   outPath: string,
   json: ValidatedOpenaApiSchema,
 ): Promise<GenerationResult> => {
@@ -41,22 +40,27 @@ export const generateTypesDefinitions = async (
     await ensureDir(controllerPath);
 
     const models = getRouteModels(responses, parameters, bodyModel);
-    const routePath = getRoutePath(routeName, envVarName, rawPath, parameters);
+    const routePath = getRoutePath(id, routeName, rawPath, parameters);
     const inputsExports = getRouteInputsExports(bodyModel);
     const outputExports = getRouteOutputsExports(routeName, responses);
     const doc = getJsDoc(id, verb, summary, description);
 
     endpointsCount++;
+    const maybeImport =
+      models.length === 0
+        ? ''
+        : `import { ${models.join(', ')} } from './../api-types';\n\n`;
     await writeFile(
       `${controllerPath}/${routeName}.ts`,
-      `${doc}\n\nimport { ${models.join(
-        ', ',
-      )} } from './../api-types';\n\n${routePath}\n\n${inputsExports}${outputExports}\n`,
+      `/* eslint-disable */\n/* tslint:disable */\n\n${doc}\n\n${maybeImport}${routePath}\n\n${inputsExports}${outputExports}\n`,
     );
   }
 
   if (typesDefinition.length > 0) {
-    await writeFile(`${outPath}/api-types.ts`, typesDefinition);
+    await writeFile(
+      `${outPath}/api-types.ts`,
+      `/* eslint-disable */\n/* tslint:disable */\n\n${typesDefinition}`,
+    );
   }
 
   return { typesGenerated: typesDefinition.length > 0, endpointsCount };

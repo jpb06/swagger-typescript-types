@@ -14,10 +14,9 @@ export const generateTypesFromUrl = async ({
   apiUrl,
   apiJsonPath,
   outPath,
-  envVarName,
 }: GenerateTypesFromUrlArguments): Promise<GenerationResult> => {
   const data = await fetchSwaggerJson(`${apiUrl}/${apiJsonPath}`);
   const schema = await validateSchema(data);
 
-  return generateTypesDefinitions(envVarName, outPath, schema);
+  return generateTypesDefinitions(outPath, schema);
 };

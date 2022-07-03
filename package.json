@@ -7,38 +7,39 @@
   "author": "jpb06 <jp.bois.06@outlook.fr>",
   "license": "MIT",
   "bin": {
-    "generateTypesFromUrl": "./cli/generate-types-from-url.cli.js"
+    "generateTypesFromUrl": "./cli/generate-types-from-url.cli.js",
+    "generateTypesFromFile": "./cli/generate-types-from-file.cli.js"
   },
   "dependencies": {
     "@apidevtools/openapi-schemas": "^2.1.0",
-    "axios": "^0.26.1",
+    "axios": "^0.27.2",
     "chalk": "4.1.2",
     "dotenv-flow": "^3.2.0",
     "fs-extra": "^10.1.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.17.9",
-    "@babel/preset-env": "^7.16.11",
-    "@babel/preset-typescript": "^7.16.7",
-    "@ts-morph/bootstrap": "^0.13.0",
+    "@babel/core": "^7.18.6",
+    "@babel/preset-env": "^7.18.6",
+    "@babel/preset-typescript": "^7.18.6",
+    "@ts-morph/bootstrap": "^0.16.0",
     "@types/dotenv-flow": "^3.2.0",
     "@types/fs-extra": "^9.0.12",
-    "@types/jest": "^27.4.1",
-    "@types/node": "^17.0.25",
-    "@typescript-eslint/eslint-plugin": "^5.20.0",
-    "@typescript-eslint/parser": "^5.20.0",
-    "babel-jest": "^27.5.1",
+    "@types/jest": "^28.1.4",
+    "@types/node": "^18.0.0",
+    "@typescript-eslint/eslint-plugin": "^5.30.3",
+    "@typescript-eslint/parser": "^5.30.3",
+    "babel-jest": "^28.1.2",
     "copyfiles": "^2.4.1",
     "del-cli": "^4.0.1",
-    "eslint": "^8.13.0",
+    "eslint": "^8.19.0",
     "eslint-config-prettier": "^8.5.0",
-    "eslint-plugin-import": "^2.25.4",
-    "eslint-plugin-jest": "^26.1.4",
-    "eslint-plugin-prettier": "^4.0.0",
-    "jest": "^27.5.1",
-    "jest-watch-typeahead": "^1.0.0",
-    "prettier": "^2.6.2",
-    "typescript": "^4.6.3"
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-jest": "^26.5.3",
+    "eslint-plugin-prettier": "^4.2.1",
+    "jest": "^28.1.2",
+    "jest-watch-typeahead": "^1.1.0",
+    "prettier": "^2.7.1",
+    "typescript": "^4.7.4"
   },
   "scripts": {
     "copy-package": "copyfiles package.json ./dist/",
@@ -51,6 +52,7 @@
     "test:silentcov": "jest --coverage --silent --runInBand --watchAll=false",
     "test:ci": "jest --ci --coverage",
     "lint": "eslint ./src",
+    "type-check": "tsc --noEmit",
     "cli": "node ./dist/cli/generate-types-from-url.cli.js"
   }
 }

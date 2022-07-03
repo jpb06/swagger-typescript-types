@@ -74,19 +74,19 @@ describe('displayError function', () => {
   const errorMessage = 'oh no!';
 
   it('should call console.error', () => {
-    displayError({ message: errorMessage });
+    displayError({ stack: errorMessage });
 
     expect(console.error).toHaveBeenCalledTimes(1);
   });
 
   it('should display the package name in cyan', () => {
-    displayError({ message: errorMessage });
+    displayError({ stack: errorMessage });
 
     expect(chalk.cyanBright).toHaveBeenCalledWith('swagger-typescript-types');
   });
 
   it('should display the error message in red', () => {
-    displayError({ message: errorMessage });
+    displayError({ stack: errorMessage });
 
     expect(chalk.redBright).toHaveBeenCalledWith(errorMessage);
   });

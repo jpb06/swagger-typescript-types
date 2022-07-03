@@ -10,6 +10,10 @@ const generateConsolidatedExports = (
     el.statusCode.startsWith('2') === (outcome === 'Success');
   const arr = array.filter(condition).map((el) => el.model);
 
+  if (arr.length === 0) {
+    arr.push('never');
+  }
+
   return `export type ${route}${outcome} = ${Array.from(new Set(arr)).join(
     ' | ',
   )};`;

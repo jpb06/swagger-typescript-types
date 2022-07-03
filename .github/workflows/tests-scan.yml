@@ -51,6 +51,9 @@ jobs:
       - name: Linting
         run: yarn lint
 
+      - name: Types check
+        run: yarn type-check
+
       - name: Tests
         run: yarn test:ci
 
