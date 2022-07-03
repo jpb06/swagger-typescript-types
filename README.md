@@ -38,7 +38,7 @@ But what if we could just extract these models and generate types instead? Oh...
 
 ### 🔶 Disclaimer
 
-⚠️🚨 I wrote this for a stack based on [nestjs](https://nestjs.com/) for the backend and [react-query](https://react-query.tanstack.com/) for the frontend, so this tool may or may not suit your needs. If you think I can help, do not hesitate to drop an issue 🙃.
+⚠️🚨 I wrote this for a stack based on [nestjs](https://nestjs.com/) for the backend and [react-query](https://react-query.tanstack.com/) for the frontend, so this tool may or may not suit your needs. If you think about another usecase, do not hesitate to drop an issue 🙃.
 
 ## ⚡ Installation
 
@@ -53,6 +53,8 @@ npm i -D swagger-typescript-types
 ```
 
 ## ⚡ Typical use : cli
+
+### 🔶 From an url
 
 Let's say we have a backend exposing endpoints on this url: <https://workshop-react-back.herokuapp.com>.
 Now, swagger exposes a json file on the [/-json](https://workshop-react-back.herokuapp.com/-json) path in this example.
@@ -83,6 +85,37 @@ Our task will do a few things using these arguments when called:
 ✔️ Extract models and generate typings from them.
 ✔️ Write them on the path defined as second argument (./api-types.ts).
 ✔️ For each route, create a file containing the endpoint path and re-exporting parameters / request body / responses types.
+✔️ Warn us if some specs are missing (missing response types, missing path parameters, etc.).
+```
+
+### 🔶 From a file
+
+We can also generate types from a file:
+
+```json
+{
+  "scripts": {
+    "api:sync": "generateTypesFromFile ./src/api/swagger.json ./src/api/types"
+  }
+}
+```
+
+The `generateTypesFromUrl` task takes two arguments:
+
+| #   | description                                                            | Example                |
+| --- | ---------------------------------------------------------------------- | ---------------------- |
+| 1️⃣  | The path of the swagger json file                                      | ./src/api/swagger.json |
+| 2️⃣  | Where to write our exposed types                                       | ./src/api/types        |
+
+Again, our task will do the following:
+
+```misc
+✔️ Read the json file.
+✔️ Validate it against [openapiv3 schema](https://github.com/APIDevTools/openapi-schemas).
+✔️ Extract models and generate typings from it.
+✔️ Write them on the path defined as second argument (./api-types.ts).
+✔️ For each route, create a file containing the endpoint path and re-exporting parameters / request body / responses types.
+✔️ Warn us if some specs are missing (missing response types, missing path parameters, etc.).
 ```
 
 ## ⚡ Generated files
@@ -132,8 +165,7 @@ Now let's check an [endpoint](http://localhost:3001/#/squads/SquadsController_ge
 
 import { DevDto, BadRequestDto, ApiResponseDto } from './../api-types';
 
-export const getPath = (id: number): string =>
-  `${process.env.API_URL}/squads/${id}/devs`;
+export const getPath = (id: number): string => `/squads/${id}/devs`;
 
 export type GetSquadsDevelopersSuccess = Array<DevDto>;
 export type GetSquadsDevelopersError = BadRequestDto | ApiResponseDto;
