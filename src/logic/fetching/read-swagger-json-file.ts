@@ -6,8 +6,7 @@ export const readSwaggerJsonFile = async (
   inputPath: string,
 ): Promise<InputSwaggerJson> => {
   try {
-    const data = await readJson(inputPath);
-    return data;
+    return readJson(inputPath);
   } catch (err) {
     throw new Error('Unable to read swagger file');
   }
