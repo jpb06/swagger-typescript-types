@@ -5,13 +5,13 @@ import {
   displaySuccess,
 } from '../logic/cli/console/console.messages';
 import { generateTypesFromUrl } from '../workflows/generate-types-from-url';
-import { validateUrlArguments } from './args/validate-url-arguments';
+import { validateArguments } from './args/validate-url-arguments';
 
 /* istanbul ignore file */
 
 (async (): Promise<void> => {
   try {
-    const args = validateUrlArguments();
+    const args = validateArguments();
 
     const generationResult = await generateTypesFromUrl(args);
 

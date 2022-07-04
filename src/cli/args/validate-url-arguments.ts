@@ -5,7 +5,7 @@ import yargs from 'yargs/yargs';
 
 import { GenerateTypesFromUrlArguments } from '../../workflows/generate-types-from-url';
 
-export const validateUrlArguments = (): GenerateTypesFromUrlArguments => {
+export const validateArguments = (): GenerateTypesFromUrlArguments => {
   dotenv.config({ silent: true });
 
   const argv = yargs(hideBin(process.argv))

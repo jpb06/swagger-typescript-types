@@ -4,7 +4,7 @@ import yargs from 'yargs/yargs';
 
 import { GenerateTypesFromFileArguments } from '../../workflows/generate-types-from-file';
 
-export const validateFileArguments = (): GenerateTypesFromFileArguments => {
+export const validateArguments = (): GenerateTypesFromFileArguments => {
   const argv = yargs(hideBin(process.argv))
     .scriptName('generateTypesFromFile')
     .usage(chalk.blueBright('$0 -i [swaggerJsonPath] -o [outputPath]'))
