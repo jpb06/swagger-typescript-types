@@ -11,7 +11,7 @@ import { validateFileArguments } from './args/validate-file-arguments';
 
 (async (): Promise<void> => {
   try {
-    const args = await validateFileArguments();
+    const args = validateFileArguments();
 
     const generationResult = await generateTypesFromFile(args);
 

@@ -15,7 +15,7 @@ import { validateUrlArguments } from './args/validate-url-arguments';
 
     const generationResult = await generateTypesFromUrl(args);
 
-    displaySuccess(args.outPath, generationResult);
+    displaySuccess(args.outputPath, generationResult);
     process.exit(0);
   } catch (err) {
     displayError(err);
