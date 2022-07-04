@@ -1,53 +1,47 @@
-import { pathExists } from 'fs-extra';
-import { mocked } from 'jest-mock';
-
-import { getProcessArguments } from './process-argv.indirection';
-import { validateFileArguments } from './validate-file-arguments';
-
-jest.mock('./process-argv.indirection');
-jest.mock('fs-extra');
+import { runCommand } from '../../tests-related/run-command';
 
 describe('validateFileArguments function', () => {
-  const inputPath = './cool';
-  const outputPath = './bro';
+  const validateArgumentsPath = './../cli/args/validate-file-arguments';
+  const inputPath = './src/swagger.json';
+  const outputPath = './src/api';
+  global.console = { error: jest.fn() } as unknown as Console;
+  const mockExit = jest
+    .spyOn(process, 'exit')
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    .mockImplementation((() => {}) as (code?: number | undefined) => never);
 
-  it('should throw an error if the number of arguments is not equal to two', async () => {
-    mocked(getProcessArguments).mockReturnValueOnce([]);
-
-    await expect(validateFileArguments).rejects.toThrow(
-      'Expecting two arguments: intput path and output path',
-    );
+  beforeEach(() => {
+    jest.clearAllMocks();
   });
 
-  it('should throw an error if the number of arguments is more than two', async () => {
-    mocked(getProcessArguments).mockReturnValueOnce([
-      'cool',
-      'bro',
-      'yolo',
-      'yola',
-    ]);
+  it('should display an error when no -i option was given', async () => {
+    runCommand(validateArgumentsPath, '-o', outputPath);
 
-    await expect(validateFileArguments).rejects.toThrow(
-      'Expecting two arguments: intput path and output path',
-    );
+    expect(mockExit).toHaveBeenCalled();
+
+    expect(console.error).toHaveBeenCalledWith('Missing required argument: i');
   });
 
-  it('should throw an error if input path does not exist', async () => {
-    mocked(pathExists).mockResolvedValueOnce(false as never);
-    mocked(getProcessArguments).mockReturnValueOnce([inputPath, outputPath]);
+  it('should display an error when no -o option was given', async () => {
+    runCommand(validateArgumentsPath, '-i', inputPath);
 
-    await expect(validateFileArguments).rejects.toThrow(
-      `${inputPath} does not exist`,
-    );
+    expect(mockExit).toHaveBeenCalled();
+
+    expect(console.error).toHaveBeenCalledWith('Missing required argument: o');
   });
 
-  it('should return arguments', async () => {
-    mocked(pathExists).mockResolvedValueOnce(true as never);
-    mocked(getProcessArguments).mockReturnValueOnce([inputPath, outputPath]);
+  it('should return args', async () => {
+    const args = runCommand(
+      validateArgumentsPath,
+      '-i',
+      inputPath,
+      '-o',
+      outputPath,
+    );
 
-    const data = await validateFileArguments();
-
-    expect(data.inputPath).toBe(inputPath);
-    expect(data.outputPath).toBe(outputPath);
+    expect(args).toStrictEqual({
+      inputPath,
+      outputPath,
+    });
   });
 });

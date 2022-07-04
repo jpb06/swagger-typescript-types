@@ -1,39 +1,34 @@
+import chalk from 'chalk';
 import dotenv from 'dotenv-flow';
+import { hideBin } from 'yargs/helpers';
+import yargs from 'yargs/yargs';
 
 import { GenerateTypesFromUrlArguments } from '../../workflows/generate-types-from-url';
-import { getProcessArguments } from './process-argv.indirection';
 
-export const validateUrlArguments = (): GenerateTypesFromUrlArguments => {
+export const validateArguments = (): GenerateTypesFromUrlArguments => {
   dotenv.config({ silent: true });
-  const args = getProcessArguments();
-  if (args.length !== 3) {
-    throw new Error(
-      'Expecting three arguments: api url, json path and output path',
-    );
-  }
 
-  const envVarName = args[0];
-  const apiJsonPath = args[1];
-  const outPath = args[2];
+  const argv = yargs(hideBin(process.argv))
+    .scriptName('generateTypesFromUrl')
+    .usage(chalk.blueBright('$0 -u [swaggerUrl] -o [outputPath]'))
+    .epilogue('Generates api types from the json of an exposed swagger')
+    .example(
+      '$0 -u https://rhf-mui-nx-sandbox-back.herokuapp.com/-json -o ./src/api/types',
+      '',
+    )
+    .describe('u', chalk.cyanBright('Swagger json url'))
+    .describe('o', chalk.cyanBright('Where to write the generated api types'))
+    .check((args) => {
+      const urlRegex = /^(https?|chrome):\/\/[^\s$.?#].[^\s]*$/;
+      if (!urlRegex.test(args.u as string)) {
+        throw new Error(
+          chalk.bold.redBright('Errors:\n-u\t\tExpecting an url\n'),
+        );
+      }
 
-  const apiUrl = process.env[envVarName];
-  if (!apiUrl || apiUrl === 'never') {
-    throw new Error(
-      'Expecting the name of an environement variable as first parameter. This env var should contain an url to the swagger json to parse',
-    );
-  }
+      return true;
+    })
+    .demandOption(['u', 'o']).argv as { u: string; o: string };
 
-  const urlRegex = /^(https?|chrome):\/\/[^\s$.?#].[^\s]*$/;
-  if (!urlRegex.test(apiUrl)) {
-    throw new Error(
-      'Expecting an url as value from the environement variable provided. Example: https://cool.org/mySwagger',
-    );
-  }
-
-  return {
-    apiUrl,
-    apiJsonPath,
-    outPath,
-    envVarName,
-  };
+  return { swaggerJsonUrl: argv.u, outputPath: argv.o };
 };

@@ -4,19 +4,16 @@ import { validateSchema } from '../logic/validation/validate-schema';
 import { GenerationResult } from '../types/generation-result.interface';
 
 export type GenerateTypesFromUrlArguments = {
-  apiUrl: string;
-  apiJsonPath: string;
-  outPath: string;
-  envVarName: string;
+  swaggerJsonUrl: string;
+  outputPath: string;
 };
 
 export const generateTypesFromUrl = async ({
-  apiUrl,
-  apiJsonPath,
-  outPath,
+  swaggerJsonUrl,
+  outputPath,
 }: GenerateTypesFromUrlArguments): Promise<GenerationResult> => {
-  const data = await fetchSwaggerJson(`${apiUrl}/${apiJsonPath}`);
+  const data = await fetchSwaggerJson(swaggerJsonUrl);
   const schema = await validateSchema(data);
 
-  return generateTypesDefinitions(outPath, schema);
+  return generateTypesDefinitions(outputPath, schema);
 };

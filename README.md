@@ -64,18 +64,17 @@ Knowing this, we can add a script to our package.json:
 ```json
 {
   "scripts": {
-    "api:sync": "generateTypesFromUrl API_URL -json ./src/api/types"
+    "api:sync": "generateTypesFromUrl -u https://rhf-mui-nx-sandbox-back.herokuapp.com/-json -o ./src/api/types"
   }
 }
 ```
 
 The `generateTypesFromUrl` task takes tree arguments:
 
-| #   | description                                                            | Example         |
+| name   | description                                                            | Example         |
 | --- | ---------------------------------------------------------------------- | --------------- |
-| 1️⃣  | The name of an environment variable containing the path to our backend | API_URL         |
-| 2️⃣  | The path to the json exposed by swagger on our backend                 | -json           |
-| 3️⃣  | Where to write our extracted types                                     | ./src/api/types |
+| u  | The url of the json exposed by the targeted swagger | <https://rhf-mui-nx-sandbox-back.herokuapp.com/-json> |
+| o  | Where to write our exposed types                  | ./src/api/types           |
 
 Our task will do a few things using these arguments when called:
 
@@ -83,7 +82,7 @@ Our task will do a few things using these arguments when called:
 ✔️ Fetch the json exposed by our swagger (exposed in our example at the `-json` path).
 ✔️ Validate the json retrieved against [openapiv3 schema](https://github.com/APIDevTools/openapi-schemas).
 ✔️ Extract models and generate typings from them.
-✔️ Write them on the path defined as second argument (./api-types.ts).
+✔️ Write them on the path defined as second argument (./src/api/types/api-types.ts).
 ✔️ For each route, create a file containing the endpoint path and re-exporting parameters / request body / responses types.
 ✔️ Warn us if some specs are missing (missing response types, missing path parameters, etc.).
 ```
@@ -95,17 +94,17 @@ We can also generate types from a file:
 ```json
 {
   "scripts": {
-    "api:sync": "generateTypesFromFile ./src/api/swagger.json ./src/api/types"
+    "api:sync": "generateTypesFromFile -i ./specs/swagger.json -o ./src/api/types"
   }
 }
 ```
 
 The `generateTypesFromUrl` task takes two arguments:
 
-| #   | description                                                            | Example                |
+| name   | description                                                            | Example                |
 | --- | ---------------------------------------------------------------------- | ---------------------- |
-| 1️⃣  | The path of the swagger json file                                      | ./src/api/swagger.json |
-| 2️⃣  | Where to write our exposed types                                       | ./src/api/types        |
+| i  | The path of the swagger json file                                      | ./specs/swagger.json |
+| o  | Where to write our exposed types                                       | ./src/api/types        |
 
 Again, our task will do the following:
 
