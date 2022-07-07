@@ -47,10 +47,11 @@ export const generateTypesDefinitions = async (
     const doc = getJsDoc(id, verb, summary, description);
 
     endpointsCount++;
+    const maybeTypeKeyword = importsNotUsedAsValues ? 'type ' : '';
     const maybeImport =
       models.length === 0
         ? ''
-        : `import ${importsNotUsedAsValues ? 'type ' : ''}{ ${models.join(
+        : `import ${maybeTypeKeyword}{ ${models.join(
             ', ',
           )} } from './../api-types';\n\n`;
     await writeFile(
