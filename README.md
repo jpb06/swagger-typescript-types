@@ -38,7 +38,7 @@ But what if we could just extract these models and generate types instead? Oh...
 
 ### 🔶 Disclaimer
 
-⚠️🚨 I wrote this for a stack based on [nestjs](https://nestjs.com/) for the backend and [react-query](https://react-query.tanstack.com/) for the frontend, so this tool may or may not suit your needs. If you think about another usecase, do not hesitate to drop an issue 🙃.
+🚨 I wrote this for a stack based on [nestjs](https://nestjs.com/) for the backend and [react-query](https://react-query.tanstack.com/) for the frontend, so this tool may or may not suit your needs. If you think about another usecase, do not hesitate to drop an issue 🙃.
 
 ## ⚡ Installation
 
@@ -64,17 +64,23 @@ Knowing this, we can add a script to our package.json:
 ```json
 {
   "scripts": {
-    "api:sync": "generateTypesFromUrl -u https://rhf-mui-nx-sandbox-back.herokuapp.com/-json -o ./src/api/types"
+    "api:sync": "generateTypesFromUrl -u https://rhf-mui-nx-sandbox-back.herokuapp.com/-json -o ./src/api/types [-t]"
   }
 }
 ```
 
 The `generateTypesFromUrl` task takes tree arguments:
 
-| name   | description                                                            | Example         |
-| --- | ---------------------------------------------------------------------- | --------------- |
-| u  | The url of the json exposed by the targeted swagger | <https://rhf-mui-nx-sandbox-back.herokuapp.com/-json> |
-| o  | Where to write our exposed types                  | ./src/api/types           |
+| name | description                                         | Example                                               |
+| ---- | --------------------------------------------------- | ----------------------------------------------------- |
+| u    | The url of the json exposed by the targeted swagger | <https://rhf-mui-nx-sandbox-back.herokuapp.com/-json> |
+| o    | Where to write our exposed types                    | ./src/api/types                                       |
+
+Optionally, you can use `-t` flag if you're using `importsNotUsedAsValues` in your tsconfig compiler options. It will generate imports like so:
+
+```typescript
+import type { ... } from ...
+```
 
 Our task will do a few things using these arguments when called:
 
@@ -94,17 +100,23 @@ We can also generate types from a file:
 ```json
 {
   "scripts": {
-    "api:sync": "generateTypesFromFile -i ./specs/swagger.json -o ./src/api/types"
+    "api:sync": "generateTypesFromFile -i ./specs/swagger.json -o ./src/api/types [-t]"
   }
 }
 ```
 
 The `generateTypesFromUrl` task takes two arguments:
 
-| name   | description                                                            | Example                |
-| --- | ---------------------------------------------------------------------- | ---------------------- |
-| i  | The path of the swagger json file                                      | ./specs/swagger.json |
-| o  | Where to write our exposed types                                       | ./src/api/types        |
+| name | description                       | Example              |
+| ---- | --------------------------------- | -------------------- |
+| i    | The path of the swagger json file | ./specs/swagger.json |
+| o    | Where to write our exposed types  | ./src/api/types      |
+
+Optionally, you can use `-t` flag if you're using `importsNotUsedAsValues` in your tsconfig compiler options. It will generate imports like so:
+
+```typescript
+import type { ... } from ...
+```
 
 Again, our task will do the following:
 
@@ -186,6 +198,16 @@ const json: InputSwaggerJson = await fetchSwaggerJson(
 );
 ```
 
+#### 🌀 readSwaggerJsonFile
+
+This function gets the content of a swagger json file. Typical use:
+
+```typescript
+const json: InputSwaggerJson = await readSwaggerJsonFile(
+  './specs/my-swagger.json',
+);
+```
+
 #### 🌀 validateSchema
 
 This function validates some arbitrary json against the [openapiv3 schema](https://github.com/APIDevTools/openapi-schemas). Typically use:
@@ -201,9 +223,9 @@ const schema: ValidatedOpenaApiSchema = await validateSchema(data);
 This function extracts models from the swagger json and generates typings from them. Typical use:
 
 ```typescript
-const enVarName = 'API_URL';
 const outPath = './src/api/types';
 const schema: ValidatedOpenaApiSchema = { ... };
+const importsNotUsedAsValues = true
 
-await generateTypesDefinitions(envVarName, outPath, schema);
+await generateTypesDefinitions(outPath, schema, importsNotUsedAsValues);
 ```
