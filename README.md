@@ -188,24 +188,38 @@ On top of the cli, this package exposes the following functions:
 
 ### 🔶 Functions
 
-#### 🌀 fetchSwaggerJson
+#### 🌀 generateTypesFromUrl
 
-This function fetches the swagger json using axios. Typical use:
+This function generates types from a swagger exposed online. Typical use:
 
 ```typescript
-const json: InputSwaggerJson = await fetchSwaggerJson(
-  'https://workshop-react-back.herokuapp.com/-json',
-);
+const params = {
+  swaggerJsonUrl: 'https://workshop-react-back.herokuapp.com/-json',
+  outputPath './src/specs',
+  importsNotUsedAsValues: false
+};
+
+const {
+  typesGenerated, // boolean, specifies whether types have been extracted (./api-types.ts file)
+  endpointsCount  // number of endpoints extracted
+}: GenerationResult = await generateTypesFromUrl(params);
 ```
 
-#### 🌀 readSwaggerJsonFile
+#### 🌀 generateTypesFromFile
 
-This function gets the content of a swagger json file. Typical use:
+This function generates types from a swagger json file. Typical use:
 
 ```typescript
-const json: InputSwaggerJson = await readSwaggerJsonFile(
-  './specs/my-swagger.json',
-);
+const params = {
+  inputPath: './src/api/swagger.json',
+  outputPath './src/specs',
+  importsNotUsedAsValues: false
+};
+
+const {
+  typesGenerated, // boolean, specifies whether types have been extracted (./api-types.ts file)
+  endpointsCount  // number of endpoints extracted
+}: GenerationResult = await generateTypesFromFile(params);
 ```
 
 #### 🌀 validateSchema
