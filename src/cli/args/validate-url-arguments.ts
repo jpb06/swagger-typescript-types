@@ -5,6 +5,8 @@ import yargs from 'yargs/yargs';
 
 import { GenerateTypesFromUrlArguments } from '../../workflows/generate-types-from-url';
 
+type Argv = { u: string; o: string; t: boolean };
+
 export const validateArguments = (): GenerateTypesFromUrlArguments => {
   dotenv.config({ silent: true });
 
@@ -18,6 +20,14 @@ export const validateArguments = (): GenerateTypesFromUrlArguments => {
     )
     .describe('u', chalk.cyanBright('Swagger json url'))
     .describe('o', chalk.cyanBright('Where to write the generated api types'))
+    .describe(
+      't',
+      chalk.cyanBright(
+        'Whether types should be exported with the `export type ...` syntax (importsNotUsedAsValues option)',
+      ),
+    )
+    .default('t', false)
+    .boolean('t')
     .check((args) => {
       const urlRegex = /^(https?|chrome):\/\/[^\s$.?#].[^\s]*$/;
       if (!urlRegex.test(args.u as string)) {
@@ -28,7 +38,11 @@ export const validateArguments = (): GenerateTypesFromUrlArguments => {
 
       return true;
     })
-    .demandOption(['u', 'o']).argv as { u: string; o: string };
+    .demandOption(['u', 'o']).argv as Argv;
 
-  return { swaggerJsonUrl: argv.u, outputPath: argv.o };
+  return {
+    swaggerJsonUrl: argv.u,
+    outputPath: argv.o,
+    importsNotUsedAsValues: argv.t,
+  };
 };

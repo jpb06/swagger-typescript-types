@@ -6,14 +6,16 @@ import { GenerationResult } from '../types/generation-result.interface';
 export type GenerateTypesFromFileArguments = {
   inputPath: string;
   outputPath: string;
+  importsNotUsedAsValues: boolean;
 };
 
 export const generateTypesFromFile = async ({
   inputPath,
   outputPath,
+  importsNotUsedAsValues,
 }: GenerateTypesFromFileArguments): Promise<GenerationResult> => {
   const data = await readSwaggerJsonFile(inputPath);
   const schema = await validateSchema(data);
 
-  return generateTypesDefinitions(outputPath, schema);
+  return generateTypesDefinitions(outputPath, schema, importsNotUsedAsValues);
 };

@@ -6,14 +6,16 @@ import { GenerationResult } from '../types/generation-result.interface';
 export type GenerateTypesFromUrlArguments = {
   swaggerJsonUrl: string;
   outputPath: string;
+  importsNotUsedAsValues: boolean;
 };
 
 export const generateTypesFromUrl = async ({
   swaggerJsonUrl,
   outputPath,
+  importsNotUsedAsValues,
 }: GenerateTypesFromUrlArguments): Promise<GenerationResult> => {
   const data = await fetchSwaggerJson(swaggerJsonUrl);
   const schema = await validateSchema(data);
 
-  return generateTypesDefinitions(outputPath, schema);
+  return generateTypesDefinitions(outputPath, schema, importsNotUsedAsValues);
 };
