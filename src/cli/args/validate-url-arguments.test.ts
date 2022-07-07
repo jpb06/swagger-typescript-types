@@ -42,12 +42,49 @@ describe('validateUrlArguments function', () => {
     );
   });
 
-  it('should return args', async () => {
+  it('should return args and default values', async () => {
     const args = runCommand(validateArgumentsPath, '-u', url, '-o', outputPath);
 
     expect(args).toStrictEqual({
       swaggerJsonUrl: url,
       outputPath,
+      importsNotUsedAsValues: false,
     });
+  });
+
+  it('should return true when passing -t option', async () => {
+    const args = runCommand(
+      validateArgumentsPath,
+      validateArgumentsPath,
+      '-u',
+      url,
+      '-o',
+      outputPath,
+      '-t',
+    );
+
+    expect(args).toEqual(
+      expect.objectContaining({
+        importsNotUsedAsValues: true,
+      }),
+    );
+  });
+
+  it('should return true when giving an arbitrary valut to -t option', async () => {
+    const args = runCommand(
+      validateArgumentsPath,
+      '-u',
+      url,
+      '-o',
+      outputPath,
+      '-t',
+      'yolo',
+    );
+
+    expect(args).toEqual(
+      expect.objectContaining({
+        importsNotUsedAsValues: true,
+      }),
+    );
   });
 });

@@ -34,7 +34,7 @@ describe('generateTypesDefinitions function', () => {
   beforeEach(() => jest.clearAllMocks());
 
   it('should generate all the types', async () => {
-    const result = await generateTypesDefinitions(outPath, json);
+    const result = await generateTypesDefinitions(outPath, json, false);
 
     expect(result).toStrictEqual({
       typesGenerated: true,
@@ -139,7 +139,7 @@ describe('generateTypesDefinitions function', () => {
   });
 
   it('should export one path variable by exposed endpoint', async () => {
-    await generateTypesDefinitions(outPath, json);
+    await generateTypesDefinitions(outPath, json, false);
 
     expect(writeFile).toHaveBeenCalledTimes(6);
 
@@ -153,7 +153,7 @@ describe('generateTypesDefinitions function', () => {
   });
 
   it('should import related types for each exposed endpoint', async () => {
-    await generateTypesDefinitions(outPath, json);
+    await generateTypesDefinitions(outPath, json, false);
 
     expect(writeFile).toHaveBeenCalledTimes(6);
 
@@ -165,10 +165,24 @@ describe('generateTypesDefinitions function', () => {
     expectWriteFileCallToContain(4, reExportingRegex);
   });
 
+  it('should use the import type syntax for imports', async () => {
+    await generateTypesDefinitions(outPath, json, true);
+
+    expect(writeFile).toHaveBeenCalledTimes(6);
+
+    const reExportingRegex = /import type { .* } from '.\/..\/api-types';\n\n/;
+    expectWriteFileCallToContain(0, reExportingRegex);
+    expectWriteFileCallToContain(1, reExportingRegex);
+    expectWriteFileCallToContain(2, reExportingRegex);
+    expectWriteFileCallToContain(3, reExportingRegex);
+    expectWriteFileCallToContain(4, reExportingRegex);
+  });
+
   it('should not include the api-types import', async () => {
     await generateTypesDefinitions(
       outPath,
       swaggerWithoutTypesJson as unknown as ValidatedOpenaApiSchema,
+      false,
     );
 
     expect(writeFile).toHaveBeenCalledTimes(1);
@@ -181,6 +195,7 @@ describe('generateTypesDefinitions function', () => {
     await generateTypesDefinitions(
       outPath,
       swaggerWithoutSuccessTypeJson as unknown as ValidatedOpenaApiSchema,
+      false,
     );
 
     expect(writeFile).toHaveBeenCalledTimes(1);
@@ -192,7 +207,7 @@ describe('generateTypesDefinitions function', () => {
   });
 
   it('should generate jsdoc for each endpoint', async () => {
-    await generateTypesDefinitions(outPath, json);
+    await generateTypesDefinitions(outPath, json, false);
 
     expect(writeFile).toHaveBeenCalledTimes(6);
 
@@ -206,7 +221,7 @@ describe('generateTypesDefinitions function', () => {
   });
 
   it('should export one type by response', async () => {
-    await generateTypesDefinitions(outPath, json);
+    await generateTypesDefinitions(outPath, json, false);
 
     expect(writeFile).toHaveBeenCalledTimes(6);
 
@@ -238,7 +253,7 @@ describe('generateTypesDefinitions function', () => {
   });
 
   it('should export the request body type if any', async () => {
-    await generateTypesDefinitions(outPath, json);
+    await generateTypesDefinitions(outPath, json, false);
 
     expect(writeFile).toHaveBeenCalledTimes(6);
 
@@ -247,7 +262,7 @@ describe('generateTypesDefinitions function', () => {
   });
 
   it('should generate valid typescript for types', async () => {
-    await generateTypesDefinitions(outPath, json);
+    await generateTypesDefinitions(outPath, json, false);
 
     expect(writeFile).toHaveBeenCalledTimes(6);
     const rawResult = mocked(writeFile).mock.calls[5][1];
@@ -259,6 +274,7 @@ describe('generateTypesDefinitions function', () => {
     await generateTypesDefinitions(
       outPath,
       swaggerJsonWithMissingRouteName as unknown as ValidatedOpenaApiSchema,
+      false,
     );
 
     expect(console.error).toHaveBeenCalledTimes(1);
@@ -266,10 +282,14 @@ describe('generateTypesDefinitions function', () => {
   });
 
   it('should not write anything', async () => {
-    const result = await generateTypesDefinitions(outPath, {
-      components: { schemas: {} },
-      paths: [],
-    });
+    const result = await generateTypesDefinitions(
+      outPath,
+      {
+        components: { schemas: {} },
+        paths: [],
+      },
+      false,
+    );
 
     expect(result).toStrictEqual({
       typesGenerated: false,

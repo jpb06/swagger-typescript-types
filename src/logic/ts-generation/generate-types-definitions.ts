@@ -15,6 +15,7 @@ import { getRouteOutputsExports } from './get-route-outputs-exports';
 export const generateTypesDefinitions = async (
   outPath: string,
   json: ValidatedOpenaApiSchema,
+  importsNotUsedAsValues: boolean,
 ): Promise<GenerationResult> => {
   const typesDefinition = getTypesDefinitions(json.components.schemas);
   const endpoints = getExposedEndpoints(json);
@@ -46,10 +47,13 @@ export const generateTypesDefinitions = async (
     const doc = getJsDoc(id, verb, summary, description);
 
     endpointsCount++;
+    const maybeTypeKeyword = importsNotUsedAsValues ? 'type ' : '';
     const maybeImport =
       models.length === 0
         ? ''
-        : `import { ${models.join(', ')} } from './../api-types';\n\n`;
+        : `import ${maybeTypeKeyword}{ ${models.join(
+            ', ',
+          )} } from './../api-types';\n\n`;
     await writeFile(
       `${controllerPath}/${routeName}.ts`,
       `/* eslint-disable */\n/* tslint:disable */\n\n${doc}\n\n${maybeImport}${routePath}\n\n${inputsExports}${outputExports}\n`,
