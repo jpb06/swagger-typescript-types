@@ -37,7 +37,7 @@ describe('displaySuccess function', () => {
     expect(chalk.cyanBright).toHaveBeenCalledWith('swagger-typescript-types');
   });
 
-  it('should display sucess message in green and the number of handled endpoints', () => {
+  it('should display a success message in green and the number of handled endpoints', () => {
     displaySuccess(outPath, {
       endpointsCount: 5,
       typesGenerated: true,

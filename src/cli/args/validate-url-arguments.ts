@@ -1,5 +1,4 @@
 import chalk from 'chalk';
-import dotenv from 'dotenv-flow';
 import { hideBin } from 'yargs/helpers';
 import yargs from 'yargs/yargs';
 
@@ -8,8 +7,6 @@ import { GenerateTypesFromUrlArguments } from '../../workflows/generate-types-fr
 type Argv = { u: string; o: string; t: boolean };
 
 export const validateArguments = (): GenerateTypesFromUrlArguments => {
-  dotenv.config({ silent: true });
-
   const argv = yargs(hideBin(process.argv))
     .scriptName('generateTypesFromUrl')
     .usage(chalk.blueBright('$0 -u [swaggerUrl] -o [outputPath]'))
