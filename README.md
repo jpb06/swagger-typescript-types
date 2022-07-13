@@ -18,6 +18,14 @@
 [![Duplicated Lines (%)](https://sonarcloud.io/api/project_badges/measure?project=jpb06_swagger-typescript-types&metric=duplicated_lines_density)](https://sonarcloud.io/dashboard?id=jpb06_swagger-typescript-types)
 ![Last commit](https://img.shields.io/github/last-commit/jpb06/swagger-typescript-types?logo=git)
 
+Generating typescript types from swagger.
+
+<!-- readme-package-icons start -->
+
+<p align="left"><a href="https://www.typescriptlang.org/docs/"><img height="70" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg" /></a>&nbsp;<a href="https://nodejs.org/en/docs/"><img height="70" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg" /></a>&nbsp;<a href="https://yarnpkg.com/api/"><img height="70" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/yarn/yarn-original.svg" /></a>&nbsp;<a href="https://axios-http.com/fr/docs/intro"><img height="70" src="https://raw.githubusercontent.com/jpb06/readme-package-icons/main/icons/axios.png" /></a>&nbsp;<a href="https://babeljs.io/docs/en/"><img height="70" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/babel/babel-original.svg" /></a>&nbsp;<a href="https://github.com/motdotla/dotenv#readme"><img height="70" src="https://raw.githubusercontent.com/jpb06/readme-package-icons/main/icons/dotenv.png" /></a>&nbsp;<a href="https://eslint.org/docs/latest/"><img height="70" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/eslint/eslint-original.svg" /></a>&nbsp;<a href="https://jestjs.io/docs/getting-started"><img height="70" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/jest/jest-plain.svg" /></a>&nbsp;<a href="https://prettier.io/docs/en/index.html"><img height="70" src="https://raw.githubusercontent.com/jpb06/readme-package-icons/main/icons/prettier.png" /></a>&nbsp;</p>
+
+<!-- readme-package-icons end -->
+
 ## ⚡ Purpose
 
 Here is a little utility to generate typescript artifacts from swagger. This can be useful when you want to sync types between your backend and your frontend.
@@ -69,7 +77,7 @@ Knowing this, we can add a script to our package.json:
 }
 ```
 
-The `generateTypesFromUrl` task takes tree arguments:
+The `generateTypesFromUrl` task takes two arguments:
 
 | name | description                                         | Example                                               |
 | ---- | --------------------------------------------------- | ----------------------------------------------------- |
