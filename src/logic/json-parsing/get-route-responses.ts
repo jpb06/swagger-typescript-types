@@ -1,4 +1,7 @@
-import { ApiContent } from '../../types/swagger-schema.interfaces';
+import {
+  ApiContent,
+  ApiTypeDefinition,
+} from '../../types/swagger-schema.interfaces';
 import { getRouteResponseModel } from './get-route-response-model';
 
 export interface RouteResponse {
@@ -31,7 +34,11 @@ export const getRouteResponses = (
         );
       } else {
         routeResponses.push(
-          getRouteResponseModel(operationId, schema, statusCode),
+          getRouteResponseModel(
+            operationId,
+            schema as ApiTypeDefinition,
+            statusCode,
+          ),
         );
       }
     } else {

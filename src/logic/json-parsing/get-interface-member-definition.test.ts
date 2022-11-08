@@ -87,4 +87,83 @@ describe('getInterfaceMemberDefinition function', () => {
 
     expect(result).toBe(`  cool: Cool | Array<number> | string;\n`);
   });
+
+  it('should handle inline types', () => {
+    const result = getInterfaceMemberDefinition(
+      'cool',
+      ['cool'],
+      {
+        oneOf: [
+          {
+            type: 'array',
+            items: {
+              type: 'number',
+            },
+          },
+          {
+            type: 'object',
+            properties: {
+              yolo: {
+                type: 'string',
+              },
+              bro: {
+                type: 'number',
+              },
+            } as never,
+            required: ['yolo'],
+          },
+        ],
+      },
+      true,
+    );
+
+    expect(result).toBe(
+      `  cool: Array<number> | {\n  yolo: string;\n  bro?: number;\n},\n`,
+    );
+  });
+
+  it('should handle inline types made of arrays', () => {
+    const result = getInterfaceMemberDefinition(
+      'cool',
+      ['cool'],
+      {
+        oneOf: [
+          {
+            type: 'array',
+            items: {
+              type: 'object',
+              properties: {
+                yolo: {
+                  type: 'string',
+                },
+                bro: {
+                  type: 'number',
+                },
+              } as never,
+              required: ['yolo'],
+            },
+          },
+        ],
+      },
+      true,
+    );
+
+    expect(result).toBe(
+      `  cool: Array<{\n  yolo: string;\n  bro?: number;\n}>,\n`,
+    );
+  });
+
+  it('should handle enum types', () => {
+    const result = getInterfaceMemberDefinition(
+      'cool',
+      ['cool'],
+      {
+        type: 'string',
+        enum: ['yolo', 'bro'],
+      },
+      true,
+    );
+
+    expect(result).toBe(`  cool: 'yolo' | 'bro';\n`);
+  });
 });
