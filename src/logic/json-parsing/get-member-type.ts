@@ -1,5 +1,6 @@
 import { ApiTypeDefinition } from '../../types/swagger-schema.interfaces';
 import { displayWarning } from '../cli/console/console.messages';
+import { getArrayMemberType } from './get-array-member-type';
 import { getInlineTypeDefinition } from './get-inline-type-definition';
 import { getSchemaName } from './get-schema-name';
 import { mapZodTypes } from './map-zod-types';
@@ -22,22 +23,7 @@ export const getMemberType = (
     }
 
     if (property.type === 'array' && property.items) {
-      if (property.items.$ref !== undefined) {
-        return `Array<${getSchemaName(property.items.$ref)}>`;
-      } else if (
-        property.items.type === 'object' &&
-        property.items.properties &&
-        property.items.required
-      ) {
-        return `Array<${getInlineTypeDefinition(property.items as never)}>`;
-      } else if (property.items.type !== undefined) {
-        return `Array<${property.items.type}>`;
-      }
-
-      displayWarning(
-        `Unable to extract type from ${propName}; given array without $ref or type`,
-      );
-      return undefined;
+      return getArrayMemberType(propName, property as never);
     }
 
     if (property.enum) {
