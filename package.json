@@ -18,6 +18,8 @@
     "yargs": "^17.5.1"
   },
   "devDependencies": {
+    "@commitlint/cli": "^17.2.0",
+    "@commitlint/config-conventional": "^17.2.0",
     "@swc/core": "^1.2.213",
     "@swc/jest": "^0.2.21",
     "@ts-morph/bootstrap": "^0.16.0",
@@ -44,15 +46,15 @@
     "copy-package": "copyfiles package.json ./dist/",
     "copy-readme": "copyfiles README.md ./dist/",
     "build": "del-cli ./dist && tsc --project tsconfig.prod.json",
-    "postbuild": "yarn copy-package && yarn copy-readme",
+    "postbuild": "pnpm copy-package && pnpm copy-readme",
     "test": "jest",
-    "test:changes": "jest --watch",
-    "test:dev": "jest --coverage --watchAll",
-    "test:silentcov": "jest --coverage --silent --runInBand --watchAll=false",
-    "test:ci": "jest --ci --coverage",
+    "test-changes": "jest --watch",
+    "test-dev": "jest --coverage --watchAll",
+    "test-silentcov": "jest --coverage --silent --runInBand --watchAll=false",
+    "test-ci": "jest --ci --coverage",
     "lint": "eslint ./src",
     "type-check": "tsc --noEmit",
     "cli": "node ./dist/cli/generate-types-from-url.cli.js",
-    "sync-icons": "yarn generateReadmeIcons -h 70"
+    "sync-icons": "pnpm generateReadmeIcons -h 70"
   }
 }
