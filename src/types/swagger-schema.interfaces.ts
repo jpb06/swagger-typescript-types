@@ -49,13 +49,14 @@ export interface ApiSchemas {
 
 export type ApiConditionalUnionTypeDefinition =
   | ApiTypeDefinition
-  | { oneOf: Array<ApiTypeDefinition> };
+  | { oneOf: Array<ApiTypeDefinition> }
+  | { payload: ApiTypeDefinition };
 
 export interface ApiTypeDefinition {
   type?: string;
   $ref?: string;
-  items?: {
-    $ref?: string;
-    type?: string;
-  };
+  properties?: ApiConditionalUnionTypeDefinition;
+  items?: ApiTypeDefinition;
+  required?: Array<string>;
+  enum?: Array<string>;
 }
