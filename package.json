@@ -1,7 +1,7 @@
 {
   "name": "swagger-typescript-types",
   "description": "Generating typescript artifacts from a remote swagger json",
-  "version": "3.0.4",
+  "version": "3.0.5",
   "main": "index.js",
   "repository": "https://github.com/jpb06/swagger-typescript-types.git",
   "author": "jpb06 <jp.bois.06@outlook.fr>",
