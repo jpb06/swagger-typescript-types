@@ -2,11 +2,11 @@ import { splitOnce } from '../util/split-once';
 
 export const getJsDoc = (
   id: string,
-  verb: string,
+  method: string,
   summary?: string,
   description?: string,
 ): string => {
-  let doc = `/** ${splitOnce(id, '_')[1]}\n * verb: ${verb}\n`;
+  let doc = `/** ${splitOnce(id, '_')[1]}\n * method: ${method}\n`;
   if (summary) {
     doc += ` * summary: ${summary}\n`;
   }

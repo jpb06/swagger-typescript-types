@@ -212,7 +212,7 @@ describe('generateTypesDefinitions function', () => {
     expect(writeFile).toHaveBeenCalledTimes(6);
 
     const jsDocRegex =
-      /\/\*\* .*\n.*\* verb: .*\n.*\* summary: .*\n.*\* description: .*\n.*\n\n/;
+      /\/\*\* .*\n.*\* method: .*\n.*\* summary: .*\n.*\* description: .*\n.*\n\n/;
     expectWriteFileCallToContain(0, jsDocRegex);
     expectWriteFileCallToContain(1, jsDocRegex);
     expectWriteFileCallToContain(2, jsDocRegex);
