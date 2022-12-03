@@ -24,7 +24,7 @@ export const generateTypesDefinitions = async (
   for (const {
     id,
     path: rawPath,
-    verb,
+    method,
     summary,
     description,
     parameters,
@@ -44,7 +44,7 @@ export const generateTypesDefinitions = async (
     const routePath = getRoutePath(id, routeName, rawPath, parameters);
     const inputsExports = getRouteInputsExports(bodyModel);
     const outputExports = getRouteOutputsExports(routeName, responses);
-    const doc = getJsDoc(id, verb, summary, description);
+    const doc = getJsDoc(id, method, summary, description);
 
     endpointsCount++;
     const maybeTypeKeyword = importsNotUsedAsValues ? 'type ' : '';

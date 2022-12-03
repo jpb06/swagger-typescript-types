@@ -193,7 +193,7 @@ Now let's check an [endpoint](https://devfriends-backend.fly.dev/#/squads/Squads
 > ./SquadsController/getSquadsDevelopers.ts
 
 ```Typescript
- * verb: get
+ * method: get
  * summary: Get the developers belonging to a squad
  * description: Retrieves the squad developers
  */

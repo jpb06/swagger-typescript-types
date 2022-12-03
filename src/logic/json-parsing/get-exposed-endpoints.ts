@@ -10,7 +10,7 @@ export interface Route {
   summary?: string;
   description?: string;
   path: string;
-  verb: string;
+  method: string;
   parameters: Array<ApiRouteParameter>;
   bodyModel?: BodyModel;
   responses: Array<RouteResponse>;
@@ -21,11 +21,11 @@ export const getExposedEndpoints = (
 ): Array<Route> => {
   const routes: Array<Route> = [];
 
-  for (const [path, verbs] of Object.entries(json.paths)) {
+  for (const [path, methods] of Object.entries(json.paths)) {
     for (const [
-      verb,
+      method,
       { operationId, responses, summary, description, requestBody, parameters },
-    ] of Object.entries(verbs)) {
+    ] of Object.entries(methods)) {
       const bodyModel = getBodyModel(operationId, requestBody);
       const routeResponses = getRouteResponses(operationId, responses);
 
@@ -34,7 +34,7 @@ export const getExposedEndpoints = (
         summary,
         description,
         path,
-        verb,
+        method,
         parameters,
         bodyModel,
         responses: routeResponses,

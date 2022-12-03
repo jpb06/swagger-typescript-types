@@ -1,10 +1,10 @@
 import { getJsDoc } from './get-js-doc';
 
 describe('getJsDoc', () => {
-  it('should display route name and route verb', () => {
+  it('should display route name and route method', () => {
     const result = getJsDoc('UserController_getName', 'GET');
 
-    expect(result).toMatch(/^\/\*\* getName\n \* verb: GET\n \*\/$/);
+    expect(result).toMatch(/^\/\*\* getName\n \* method: GET\n \*\/$/);
   });
 
   it('should display the route summary', () => {
