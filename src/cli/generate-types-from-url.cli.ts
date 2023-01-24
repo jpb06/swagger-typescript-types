@@ -1,11 +1,11 @@
 #!/usr/bin/env node
 
+import { validateArguments } from './args/validate-url-arguments';
 import {
   displayError,
   displaySuccess,
 } from '../logic/cli/console/console.messages';
 import { generateTypesFromUrl } from '../workflows/generate-types-from-url';
-import { validateArguments } from './args/validate-url-arguments';
 
 /* istanbul ignore file */
 

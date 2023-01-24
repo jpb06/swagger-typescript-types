@@ -1,8 +1,8 @@
+import { getRouteResponseModel } from './get-route-response-model';
 import {
   ApiContent,
   ApiTypeDefinition,
 } from '../../types/swagger-schema.interfaces';
-import { getRouteResponseModel } from './get-route-response-model';
 
 export interface RouteResponse {
   statusCode: string;

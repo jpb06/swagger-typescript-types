@@ -1,9 +1,9 @@
+import { getSchemaName } from './get-schema-name';
 import {
   ApiContent,
   ApiTypeDefinition,
 } from '../../types/swagger-schema.interfaces';
 import { displayWarning } from '../cli/console/console.messages';
-import { getSchemaName } from './get-schema-name';
 
 export interface BodyModel {
   model: string;

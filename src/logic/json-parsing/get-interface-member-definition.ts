@@ -1,8 +1,8 @@
+import { getMemberType } from './get-member-type';
 import {
   ApiConditionalUnionTypeDefinition,
   ApiTypeDefinition,
 } from '../../types/swagger-schema.interfaces';
-import { getMemberType } from './get-member-type';
 
 export const getInterfaceMemberDefinition = (
   propName: string,

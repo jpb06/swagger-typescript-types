@@ -1,5 +1,9 @@
 import { writeFile, ensureDir } from 'fs-extra';
 
+import { getJsDoc } from './get-js-doc';
+import { getRouteInputsExports } from './get-route-inputs-exports';
+import { getRouteModels } from './get-route-models';
+import { getRouteOutputsExports } from './get-route-outputs-exports';
 import { GenerationResult } from '../../types/generation-result.interface';
 import { ValidatedOpenaApiSchema } from '../../types/swagger-schema.interfaces';
 import { displayWarning } from '../cli/console/console.messages';
@@ -7,10 +11,6 @@ import { getExposedEndpoints } from '../json-parsing/get-exposed-endpoints';
 import { getRoutePath } from '../json-parsing/get-route-path';
 import { getTypesDefinitions } from '../json-parsing/get-types-definitions';
 import { splitOnce } from '../util/split-once';
-import { getJsDoc } from './get-js-doc';
-import { getRouteInputsExports } from './get-route-inputs-exports';
-import { getRouteModels } from './get-route-models';
-import { getRouteOutputsExports } from './get-route-outputs-exports';
 
 export const generateTypesDefinitions = async (
   outPath: string,
