@@ -1,5 +1,5 @@
-import { ApiSchemas } from '../../types/swagger-schema.interfaces';
 import { getInterfaceMemberDefinition } from './get-interface-member-definition';
+import { ApiSchemas } from '../../types/swagger-schema.interfaces';
 
 export const getTypesDefinitions = (schemas: ApiSchemas): string => {
   let types = '';

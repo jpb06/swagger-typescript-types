@@ -1,5 +1,4 @@
 import { readJson } from 'fs-extra';
-import { mocked } from 'jest-mock';
 
 import { readSwaggerJsonFile } from './read-swagger-json-file';
 
@@ -9,7 +8,7 @@ describe('fetchSwaggerJson function', () => {
   const path = './path';
 
   it('should throw an error if json reading failed', async () => {
-    mocked(readJson).mockRejectedValueOnce('Oh no!' as never);
+    jest.mocked(readJson).mockRejectedValueOnce('Oh no!' as never);
 
     await expect(readSwaggerJsonFile(path)).rejects.toThrow(
       'Unable to read swagger file',
@@ -18,7 +17,7 @@ describe('fetchSwaggerJson function', () => {
 
   it('should return json', async () => {
     const data = { cool: true };
-    mocked(readJson).mockResolvedValueOnce(data as never);
+    jest.mocked(readJson).mockResolvedValueOnce(data as never);
 
     const json = await readSwaggerJsonFile(path);
 

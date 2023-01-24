@@ -1,9 +1,9 @@
-import { ApiTypeDefinition } from '../../types/swagger-schema.interfaces';
-import { displayWarning } from '../cli/console/console.messages';
 import { getArrayMemberType } from './get-array-member-type';
 import { getInlineTypeDefinition } from './get-inline-type-definition';
 import { getSchemaName } from './get-schema-name';
 import { mapZodTypes } from './map-zod-types';
+import { ApiTypeDefinition } from '../../types/swagger-schema.interfaces';
+import { displayWarning } from '../cli/console/console.messages';
 
 export const getMemberType = (
   propName: string,

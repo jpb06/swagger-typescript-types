@@ -1,6 +1,6 @@
+import { getInlineTypeDefinition } from './get-inline-type-definition';
 import { ApiTypeDefinition } from '../../types/swagger-schema.interfaces';
 import { WithRequiredProperty } from '../../types/with-required-property.type';
-import { getInlineTypeDefinition } from './get-inline-type-definition';
 
 describe('getInlineTypeDefinition function', () => {
   it('should return members definition', () => {

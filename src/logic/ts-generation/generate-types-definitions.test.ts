@@ -1,18 +1,17 @@
 import { writeFile } from 'fs-extra';
-import { mocked } from 'jest-mock';
 
+import { generateTypesDefinitions } from './generate-types-definitions';
 import swaggerJsonWithMissingRouteName from '../../tests-related/mock-data/swagger-with-missing-routename.json';
 import swaggerWithoutSuccessTypeJson from '../../tests-related/mock-data/swagger-without-success-type.json';
 import swaggerWithoutTypesJson from '../../tests-related/mock-data/swagger-without-types.json';
 import swaggerJson from '../../tests-related/mock-data/swagger.json';
 import { transpileRaw } from '../../tests-related/ts/transpile-raw';
 import { ValidatedOpenaApiSchema } from '../../types/swagger-schema.interfaces';
-import { generateTypesDefinitions } from './generate-types-definitions';
 
 jest.mock('fs-extra');
 
 const expectWriteFileCallToContain = (index: number, regex: RegExp): void => {
-  const rawResult = mocked(writeFile).mock.calls[index][1];
+  const rawResult = jest.mocked(writeFile).mock.calls[index][1];
   expect(rawResult).toMatch(regex);
 };
 
@@ -21,7 +20,7 @@ const expectToContainSuccessAndError = (
   successExport: string,
   errorExport: string,
 ): void => {
-  const rawResult = mocked(writeFile).mock.calls[index][1];
+  const rawResult = jest.mocked(writeFile).mock.calls[index][1];
   expect(rawResult).toContain(successExport);
   expect(rawResult).toContain(errorExport);
 };
@@ -42,7 +41,7 @@ describe('generateTypesDefinitions function', () => {
     });
 
     expect(writeFile).toHaveBeenCalledTimes(6);
-    const rawResult = mocked(writeFile).mock.calls[5][1] as string;
+    const rawResult = jest.mocked(writeFile).mock.calls[5][1] as string;
 
     expect(
       rawResult.startsWith('/* eslint-disable */\n/* tslint:disable */\n\n'),
@@ -186,7 +185,7 @@ describe('generateTypesDefinitions function', () => {
     );
 
     expect(writeFile).toHaveBeenCalledTimes(1);
-    expect(mocked(writeFile).mock.calls.join('')).not.toContain(
+    expect(jest.mocked(writeFile).mock.calls.join('')).not.toContain(
       `from './../api-types';`,
     );
   });
@@ -200,7 +199,7 @@ describe('generateTypesDefinitions function', () => {
 
     expect(writeFile).toHaveBeenCalledTimes(1);
 
-    const output = mocked(writeFile).mock.calls.join('');
+    const output = jest.mocked(writeFile).mock.calls.join('');
 
     expect(output).toContain('export type LoginSuccess = never;');
     expect(output).toContain('export type LoginError = never;');
@@ -265,7 +264,7 @@ describe('generateTypesDefinitions function', () => {
     await generateTypesDefinitions(outPath, json, false);
 
     expect(writeFile).toHaveBeenCalledTimes(6);
-    const rawResult = mocked(writeFile).mock.calls[5][1];
+    const rawResult = jest.mocked(writeFile).mock.calls[5][1];
     const transpilationResult = await transpileRaw(rawResult);
     expect(transpilationResult).toHaveLength(0);
   });
