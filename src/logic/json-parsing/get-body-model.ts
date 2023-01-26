@@ -11,16 +11,28 @@ export interface BodyModel {
   isPrimitiveModel: boolean;
 }
 
+const getSchema = (requestBody: ApiContent): ApiTypeDefinition | undefined => {
+  if ('application/json' in requestBody.content) {
+    return requestBody.content['application/json'].schema as ApiTypeDefinition;
+  }
+  if ('multipart/form-data' in requestBody.content) {
+    return requestBody.content['multipart/form-data'].schema as ApiTypeDefinition;
+  }
+  return undefined;
+}
+
 export const getBodyModel = (
-  operationId: string,
-  requestBody?: ApiContent,
+    operationId: string,
+    requestBody?: ApiContent,
 ): BodyModel | undefined => {
   if (!requestBody) {
     return undefined;
   }
 
-  const schema = requestBody.content['application/json']
-    .schema as ApiTypeDefinition;
+  const schema = getSchema(requestBody)
+  if (!schema) {
+    return undefined;
+  }
 
   if (schema.$ref) {
     return {
@@ -48,8 +60,8 @@ export const getBodyModel = (
       }
 
       displayWarning(
-        `Unable to extract type for request body; given array without $ref or type`,
-        operationId,
+          `Unable to extract type for request body; given array without $ref or type`,
+          operationId,
       );
       return undefined;
     }

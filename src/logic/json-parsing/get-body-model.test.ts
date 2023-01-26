@@ -70,6 +70,24 @@ describe('getBodyModel function', () => {
     });
   });
 
+  it('should return the schema type on multipart schema', () => {
+    const type = 'string';
+    const result = getBodyModel('myRoute', {
+      content: {
+        'multipart/form-data': {
+          schema: {
+            type,
+          },
+        },
+      },
+    });
+
+    expect(result).toStrictEqual({
+      isPrimitiveModel: true,
+      model: type,
+    });
+  });
+
   it('should return an array containing a custom type', () => {
     const result = getBodyModel('myRoute', {
       content: {
