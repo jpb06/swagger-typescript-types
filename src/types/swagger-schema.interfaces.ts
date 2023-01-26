@@ -34,6 +34,10 @@ export interface ApiContent {
     'application/json': {
       schema: ApiConditionalUnionTypeDefinition;
     };
+  } | {
+    'multipart/form-data': {
+      schema: ApiConditionalUnionTypeDefinition;
+    };
   };
 }
 
