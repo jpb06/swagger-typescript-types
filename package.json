@@ -1,14 +1,14 @@
 {
   "name": "@hublo/swagger-typescript-types",
   "description": "Generating typescript artifacts from a remote swagger json",
-  "version": "3.0.9",
+  "version": "3.0.10",
   "main": "index.js",
   "repository": "https://github.com/jpb06/swagger-typescript-types.git",
   "author": "jpb06 <jp.bois.06@outlook.fr>",
   "license": "MIT",
   "bin": {
-    "generateTypesFromUrl": "./cli/generate-types-from-url.cli.js",
-    "generateTypesFromFile": "./cli/generate-types-from-file.cli.js"
+    "generateTypesFromUrl": "./dist/cli/generate-types-from-url.cli.js",
+    "generateTypesFromFile": "./dist/cli/generate-types-from-file.cli.js"
   },
   "dependencies": {
     "@apidevtools/openapi-schemas": "^2.1.0",
@@ -56,7 +56,7 @@
     "test-ci": "jest --ci --coverage",
     "lint": "eslint ./src",
     "type-check": "tsc --noEmit",
-    "cli": "node ./dist/cli/generate-types-from-url.cli.js",
+    "cli": "node ./dist/cli/generate-types-from-file.cli.js",
     "sync-icons": "pnpm generateReadmeIcons -h 50"
   }
 }
