@@ -1,8 +1,9 @@
-import { getInlineTypeDefinition } from './get-inline-type-definition';
-import { getSchemaName } from './get-schema-name';
 import { ApiTypeDefinition } from '../../types/swagger-schema.interfaces';
 import { WithRequiredProperty } from '../../types/with-required-property.type';
 import { displayWarning } from '../cli/console/console.messages';
+
+import { getInlineTypeDefinition } from './get-inline-type-definition';
+import { getSchemaName } from './get-schema-name';
 
 export const getArrayMemberType = (
   propName: string,

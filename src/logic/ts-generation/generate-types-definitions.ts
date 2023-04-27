@@ -1,16 +1,18 @@
-import { writeFile, ensureDir } from 'fs-extra';
+import { ensureDir, writeFile } from 'fs-extra';
 
-import { getJsDoc } from './get-js-doc';
-import { getRouteInputsExports } from './get-route-inputs-exports';
-import { getRouteModels } from './get-route-models';
-import { getRouteOutputsExports } from './get-route-outputs-exports';
 import { GenerationResult } from '../../types/generation-result.interface';
 import { ValidatedOpenaApiSchema } from '../../types/swagger-schema.interfaces';
 import { displayWarning } from '../cli/console/console.messages';
 import { getExposedEndpoints } from '../json-parsing/get-exposed-endpoints';
 import { getRoutePath } from '../json-parsing/get-route-path';
 import { getTypesDefinitions } from '../json-parsing/get-types-definitions';
+import { getTypesMocks } from '../json-parsing/mock/get-types-mock';
 import { splitOnce } from '../util/split-once';
+
+import { getJsDoc } from './get-js-doc';
+import { getRouteInputsExports } from './get-route-inputs-exports';
+import { getRouteModels } from './get-route-models';
+import { getRouteOutputsExports } from './get-route-outputs-exports';
 
 export const generateTypesDefinitions = async (
   outPath: string,
@@ -18,6 +20,7 @@ export const generateTypesDefinitions = async (
   importsNotUsedAsValues: boolean,
 ): Promise<GenerationResult> => {
   const typesDefinition = getTypesDefinitions(json.components.schemas);
+  const typesMocks = getTypesMocks(json.components.schemas);
   const endpoints = getExposedEndpoints(json);
 
   let endpointsCount = 0;
@@ -64,6 +67,13 @@ export const generateTypesDefinitions = async (
     await writeFile(
       `${outPath}/api-types.ts`,
       `/* eslint-disable */\n/* tslint:disable */\n\n${typesDefinition}`,
+    );
+  }
+
+  if (typesMocks.length > 0) {
+    await writeFile(
+      `${outPath}/api-types.mock.ts`,
+      `/* eslint-disable */\n/* tslint:disable */\n\n${typesMocks}`,
     );
   }
 
