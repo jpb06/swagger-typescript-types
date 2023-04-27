@@ -22,6 +22,7 @@ export const validateArguments = (): GenerateTypesFromFileArguments => {
     )
     .default('t', false)
     .boolean('t')
+    .locale('en')
     .demandOption(['i', 'o']).argv as Argv;
 
   return {

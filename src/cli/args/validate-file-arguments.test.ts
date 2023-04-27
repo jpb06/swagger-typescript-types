@@ -19,7 +19,9 @@ describe('validateFileArguments function', () => {
 
     expect(mockExit).toHaveBeenCalled();
 
-    expect(console.error).toHaveBeenCalledWith('Missing required argument: i');
+    expect(console.error).toHaveBeenCalledWith(
+      expect.stringContaining('Missing required argument: i'),
+    );
   });
 
   it('should display an error when no -o option was given', async () => {
@@ -27,7 +29,9 @@ describe('validateFileArguments function', () => {
 
     expect(mockExit).toHaveBeenCalled();
 
-    expect(console.error).toHaveBeenCalledWith('Missing required argument: o');
+    expect(console.error).toHaveBeenCalledWith(
+      expect.stringContaining('Missing required argument: o'),
+    );
   });
 
   it('should return args and default values', async () => {

@@ -1,12 +1,13 @@
 import { writeFile } from 'fs-extra';
 
-import { generateTypesDefinitions } from './generate-types-definitions';
 import swaggerJsonWithMissingRouteName from '../../tests-related/mock-data/swagger-with-missing-routename.json';
 import swaggerWithoutSuccessTypeJson from '../../tests-related/mock-data/swagger-without-success-type.json';
 import swaggerWithoutTypesJson from '../../tests-related/mock-data/swagger-without-types.json';
 import swaggerJson from '../../tests-related/mock-data/swagger.json';
 import { transpileRaw } from '../../tests-related/ts/transpile-raw';
 import { ValidatedOpenaApiSchema } from '../../types/swagger-schema.interfaces';
+
+import { generateTypesDefinitions } from './generate-types-definitions';
 
 jest.mock('fs-extra');
 
@@ -40,14 +41,16 @@ describe('generateTypesDefinitions function', () => {
       endpointsCount: 5,
     });
 
-    expect(writeFile).toHaveBeenCalledTimes(6);
-    const rawResult = jest.mocked(writeFile).mock.calls[5][1] as string;
+    expect(writeFile).toHaveBeenCalledTimes(7);
+    const rawResultApiType = jest.mocked(writeFile).mock.calls[5][1] as string;
 
     expect(
-      rawResult.startsWith('/* eslint-disable */\n/* tslint:disable */\n\n'),
+      rawResultApiType.startsWith(
+        '/* eslint-disable */\n/* tslint:disable */\n\n',
+      ),
     ).toBeTruthy();
 
-    const exports = rawResult
+    const exports = rawResultApiType
       .split('/* eslint-disable */\n/* tslint:disable */\n\n')[1]
       .split('export ')
       .filter((el) => el !== '');
@@ -135,12 +138,140 @@ describe('generateTypesDefinitions function', () => {
     expect(exports[12]).toBe(
       'interface CreateSubjectResultDto {\n  data: SubjectDto;\n}\n',
     );
+
+    const rawResultMock = jest.mocked(writeFile).mock.calls[6][1] as string;
+    expect(
+      rawResultMock.startsWith(
+        '/* eslint-disable */\n/* tslint:disable */\n\n',
+      ),
+    ).toBeTruthy();
+
+    const mocks = rawResultMock
+      .split('/* eslint-disable */\n/* tslint:disable */\n\n')[1]
+      .split('import ')
+      .filter((el) => el !== '');
+
+    expect(mocks[0]).toBe(
+      `type { LoginBodyDto } from './api-types'\n` +
+        'export const mockLoginBodyDto: LoginBodyDto = {\n' +
+        `  token: 'token',\n` +
+        '}\n',
+    );
+
+    expect(mocks[1]).toBe(
+      `type { LoginResultDataDto } from './api-types'\n` +
+        'export const mockLoginResultDataDto: LoginResultDataDto = {\n' +
+        `  token: 'token',\n` +
+        '}\n',
+    );
+
+    expect(mocks[2]).toBe(
+      `type { LoginResultDto } from './api-types'\n` +
+        'export const mockLoginResultDto: LoginResultDto = {\n' +
+        `  data: mockLoginResultDataDto,\n` +
+        '}\n',
+    );
+
+    expect(mocks[3]).toBe(
+      `type { ApiResponseDto } from './api-types'\n` +
+        'export const mockApiResponseDto: ApiResponseDto = {\n' +
+        `  statusCode: 400,\n` +
+        `  message: 'message',\n` +
+        '}\n',
+    );
+
+    expect(mocks[4]).toBe(
+      `type { ChapterMemberDto } from './api-types'\n` +
+        'export const mockChapterMemberDto: ChapterMemberDto = {\n' +
+        `  idUser: 123,\n` +
+        `  userFullName: 'userFullName',\n` +
+        `  userEmail: 'userEmail',\n` +
+        `  userPictureUrl: 'userPictureUrl',\n` +
+        `  role: 'role',\n` +
+        '}\n',
+    );
+
+    expect(mocks[5]).toBe(
+      `type { ChapterWithMembersDto } from './api-types'\n` +
+        'export const mockChapterWithMembersDto: ChapterWithMembersDto = {\n' +
+        `  id: 12345,\n` +
+        `  name: 'name',\n` +
+        `  members: [mockChapterMemberDto],\n` +
+        '}\n',
+    );
+
+    expect(mocks[6]).toBe(
+      `type { ChaptersWithMembersResultDto } from './api-types'\n` +
+        'export const mockChaptersWithMembersResultDto: ChaptersWithMembersResultDto = {\n' +
+        `  data: [mockChapterWithMembersDto],\n` +
+        '}\n',
+    );
+
+    expect(mocks[7]).toBe(
+      `type { DiscussionDto } from './api-types'\n` +
+        'export const mockDiscussionDto: DiscussionDto = {\n' +
+        `  id: 12345,\n` +
+        `  idUser: 123,\n` +
+        `  userFullName: 'userFullName',\n` +
+        `  userEmail: 'userEmail',\n` +
+        `  comment: 'comment',\n` +
+        `  link: 'link',\n` +
+        `  createdAt: '2021-12-31T23:59:59.999Z',\n` +
+        '}\n',
+    );
+
+    expect(mocks[8]).toBe(
+      `type { SubjectWithDiscussionsDto } from './api-types'\n` +
+        'export const mockSubjectWithDiscussionsDto: SubjectWithDiscussionsDto = {\n' +
+        `  id: 12345,\n` +
+        `  title: 'title',\n` +
+        `  details: 'details',\n` +
+        `  link: 'link',\n` +
+        `  createdAt: '2021-12-31T23:59:59.999Z',\n` +
+        `  closedAt: '2021-12-31T23:59:59.999Z',\n` +
+        `  answer: 'answer',\n` +
+        `  chapterId: 123,\n` +
+        `  chapterName: 'chapterName',\n` +
+        `  discussion: [mockDiscussionDto],\n` +
+        '}\n',
+    );
+
+    expect(mocks[9]).toBe(
+      `type { SubjectsResultDto } from './api-types'\n` +
+        'export const mockSubjectsResultDto: SubjectsResultDto = {\n' +
+        `  data: [mockSubjectWithDiscussionsDto],\n` +
+        '}\n',
+    );
+
+    expect(mocks[10]).toBe(
+      `type { NewSubjectDto } from './api-types'\n` +
+        'export const mockNewSubjectDto: NewSubjectDto = {\n' +
+        `  idChapter: 123,\n` +
+        `  title: 'title',\n` +
+        `  details: 'details',\n` +
+        `  link: 'link',\n` +
+        '}\n',
+    );
+    expect(mocks[11]).toBe(
+      `type { SubjectDto } from './api-types'\n` +
+        'export const mockSubjectDto: SubjectDto = {\n' +
+        `  id: 12345,\n` +
+        `  title: 'title',\n` +
+        `  details: 'details',\n` +
+        `  link: 'link',\n` +
+        `  createdAt: '2021-12-31T23:59:59.999Z',\n` +
+        `  closedAt: '2021-12-31T23:59:59.999Z',\n` +
+        `  answer: 'answer',\n` +
+        `  chapterId: 123,\n` +
+        `  chapterName: 'chapterName',\n` +
+        '}\n',
+    );
   });
 
   it('should export one path variable by exposed endpoint', async () => {
     await generateTypesDefinitions(outPath, json, false);
 
-    expect(writeFile).toHaveBeenCalledTimes(6);
+    expect(writeFile).toHaveBeenCalledTimes(7);
 
     const pathExportRegex =
       /(export const path = `.*`;)|(export const getPath = (.*) => `.*`;)/;
@@ -154,7 +285,7 @@ describe('generateTypesDefinitions function', () => {
   it('should import related types for each exposed endpoint', async () => {
     await generateTypesDefinitions(outPath, json, false);
 
-    expect(writeFile).toHaveBeenCalledTimes(6);
+    expect(writeFile).toHaveBeenCalledTimes(7);
 
     const reExportingRegex = /import { .* } from '.\/..\/api-types';\n\n/;
     expectWriteFileCallToContain(0, reExportingRegex);
@@ -167,7 +298,7 @@ describe('generateTypesDefinitions function', () => {
   it('should use the import type syntax for imports', async () => {
     await generateTypesDefinitions(outPath, json, true);
 
-    expect(writeFile).toHaveBeenCalledTimes(6);
+    expect(writeFile).toHaveBeenCalledTimes(7);
 
     const reExportingRegex = /import type { .* } from '.\/..\/api-types';\n\n/;
     expectWriteFileCallToContain(0, reExportingRegex);
@@ -208,7 +339,7 @@ describe('generateTypesDefinitions function', () => {
   it('should generate jsdoc for each endpoint', async () => {
     await generateTypesDefinitions(outPath, json, false);
 
-    expect(writeFile).toHaveBeenCalledTimes(6);
+    expect(writeFile).toHaveBeenCalledTimes(7);
 
     const jsDocRegex =
       /\/\*\* .*\n.*\* method: .*\n.*\* summary: .*\n.*\* description: .*\n.*\n\n/;
@@ -222,7 +353,7 @@ describe('generateTypesDefinitions function', () => {
   it('should export one type by response', async () => {
     await generateTypesDefinitions(outPath, json, false);
 
-    expect(writeFile).toHaveBeenCalledTimes(6);
+    expect(writeFile).toHaveBeenCalledTimes(7);
 
     expectToContainSuccessAndError(
       0,
@@ -254,7 +385,7 @@ describe('generateTypesDefinitions function', () => {
   it('should export the request body type if any', async () => {
     await generateTypesDefinitions(outPath, json, false);
 
-    expect(writeFile).toHaveBeenCalledTimes(6);
+    expect(writeFile).toHaveBeenCalledTimes(7);
 
     const requestBodyExportsRegex = /export type RequestBody = .*\n/;
     expectWriteFileCallToContain(0, requestBodyExportsRegex);
@@ -263,7 +394,7 @@ describe('generateTypesDefinitions function', () => {
   it('should generate valid typescript for types', async () => {
     await generateTypesDefinitions(outPath, json, false);
 
-    expect(writeFile).toHaveBeenCalledTimes(6);
+    expect(writeFile).toHaveBeenCalledTimes(7);
     const rawResult = jest.mocked(writeFile).mock.calls[5][1];
     const transpilationResult = await transpileRaw(rawResult);
     expect(transpilationResult).toHaveLength(0);
@@ -277,7 +408,7 @@ describe('generateTypesDefinitions function', () => {
     );
 
     expect(console.error).toHaveBeenCalledTimes(1);
-    expect(writeFile).toHaveBeenCalledTimes(1);
+    expect(writeFile).toHaveBeenCalledTimes(2);
   });
 
   it('should not write anything', async () => {

@@ -1,10 +1,9 @@
 {
   "name": "@hublo/swagger-typescript-types",
   "description": "Generating typescript artifacts from a remote swagger json",
-  "version": "3.0.10",
+  "version": "3.2.0",
   "main": "index.js",
-  "repository": "https://github.com/jpb06/swagger-typescript-types.git",
-  "author": "jpb06 <jp.bois.06@outlook.fr>",
+  "repository": "https://github.com/hublo/swagger-typescript-types.git",
   "license": "MIT",
   "bin": {
     "generateTypesFromUrl": "./dist/cli/generate-types-from-url.cli.js",

@@ -1,6 +1,7 @@
-import { getInterfaceMemberDefinition } from './get-interface-member-definition';
 import { ApiTypeDefinition } from '../../types/swagger-schema.interfaces';
 import { WithRequiredProperty } from '../../types/with-required-property.type';
+
+import { getInterfaceMemberDefinition } from './get-interface-member-definition';
 
 export const getInlineTypeDefinition = (
   property: WithRequiredProperty<ApiTypeDefinition, 'properties' | 'required'>,
