@@ -108,7 +108,7 @@ describe('getInlineTypeMock function', () => {
     const result = getInlineTypeMock(input);
 
     const members = `{
-  type: '{"some unknown object":"please add an example in the DTO to remove this warning"}',
+  type: {"some unknown object":"please add an example in the DTO to remove this warning"},
   params: mockWebhookDispatcherParamsBodyDto,
 }`;
 

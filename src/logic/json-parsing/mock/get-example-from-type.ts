@@ -26,7 +26,7 @@ export const getExampleFromType = (
 =======
 
     case PropType.object:
-      return `'${getExampleFromObject(propName)}'`;
+      return JSON.stringify(getExampleFromObject(propName));
 
     case PropType.date:
       return `${getExampleFromDate(propName)}`;
@@ -153,20 +153,20 @@ export const getExampleFromBoolean = (propName: string): boolean => {
 <<<<<<< HEAD
 =======
 
-export const getExampleFromObject = (propName: string): string => {
+export const getExampleFromObject = (propName: string): object => {
   switch (propName) {
     default:
-      return JSON.stringify({
+      return {
         'some unknown object':
           'please add an example in the DTO to remove this warning',
-      });
+      };
   }
 };
 
 export const getExampleFromDate = (propName: string): string => {
   switch (propName) {
     default:
-      return 'new Date(2021-12-31T23:59:59.999Z)';
+      return `new Date('2021-12-31T23:59:59.999Z')`;
   }
 };
 >>>>>>> 9c1a687 (chore: add mock example)

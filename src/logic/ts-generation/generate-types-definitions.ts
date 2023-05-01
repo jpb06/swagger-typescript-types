@@ -73,7 +73,7 @@ export const generateTypesDefinitions = async (
   if (typesMocks.length > 0) {
     await writeFile(
       `${outPath}/api-types.mock.ts`,
-      `/* eslint-disable */\n/* tslint:disable */\n\n${typesMocks}`,
+      `/* eslint-disable */\n/* tslint:disable */\n// @ts-nocheck\n\n${typesMocks}`,
     );
   }
 
