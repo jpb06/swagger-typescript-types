@@ -15,6 +15,19 @@ export const getMemberMock = (
     return `${getMockObjectNameFromPath(property.$ref)}`;
   }
 
+<<<<<<< HEAD
+=======
+  if (property.example) {
+    try {
+      return `${JSON.stringify(property.example)}`;
+    } catch (_) {
+      displayWarning(
+        `Unable to stringify the example provided for ${propName}`,
+      );
+    }
+  }
+
+>>>>>>> 9c1a687 (chore: add mock example)
   if (property.type) {
     if (
       property.type === 'object' &&

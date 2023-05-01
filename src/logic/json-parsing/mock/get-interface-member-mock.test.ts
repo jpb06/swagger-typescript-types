@@ -157,7 +157,11 @@ describe('getInterfaceMemberMock function', () => {
       ],
     });
 
+<<<<<<< HEAD
     expect(result).toBe(`  cool: [{\n  yolo: string;\n  bro?: number;\n}],\n`);
+=======
+    expect(result).toBe(`  cool: [{\n  yolo: 'yolo',\n  bro: 123,\n}],\n`);
+>>>>>>> 9c1a687 (chore: add mock example)
   });
 
   it('should handle enum types', () => {
