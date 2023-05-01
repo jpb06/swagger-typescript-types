@@ -142,12 +142,14 @@ describe('generateTypesDefinitions function', () => {
     const rawResultMock = jest.mocked(writeFile).mock.calls[6][1] as string;
     expect(
       rawResultMock.startsWith(
-        '/* eslint-disable */\n/* tslint:disable */\n\n',
+        '/* eslint-disable */\n/* tslint:disable */\n// @ts-nocheck\n\n',
       ),
     ).toBeTruthy();
 
     const mocks = rawResultMock
-      .split('/* eslint-disable */\n/* tslint:disable */\n\n')[1]
+      .split(
+        '/* eslint-disable */\n/* tslint:disable */\n// @ts-nocheck\n\n',
+      )[1]
       .split('import ')
       .filter((el) => el !== '');
 

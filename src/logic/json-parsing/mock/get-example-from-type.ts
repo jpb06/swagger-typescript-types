@@ -8,7 +8,11 @@ export const getExampleFromType = (
   propName: string,
   type: string,
 ): string | undefined => {
+<<<<<<< HEAD
   switch (type) {
+=======
+  switch (type?.toLowerCase()) {
+>>>>>>> 9c1a687 (chore: add mock example)
     case PropType.string:
       return `'${getExampleFromString(propName)}'`;
 
@@ -18,6 +22,15 @@ export const getExampleFromType = (
 
     case PropType.boolean:
       return getExampleFromBoolean(propName).toString();
+<<<<<<< HEAD
+=======
+
+    case PropType.object:
+      return JSON.stringify(getExampleFromObject(propName));
+
+    case PropType.date:
+      return `${getExampleFromDate(propName)}`;
+>>>>>>> 9c1a687 (chore: add mock example)
   }
 
   displayWarning(`Unable to extract example from ${propName} and ${type}`);
@@ -137,3 +150,23 @@ export const getExampleFromBoolean = (propName: string): boolean => {
       return true;
   }
 };
+<<<<<<< HEAD
+=======
+
+export const getExampleFromObject = (propName: string): object => {
+  switch (propName) {
+    default:
+      return {
+        'some unknown object':
+          'please add an example in the DTO to remove this warning',
+      };
+  }
+};
+
+export const getExampleFromDate = (propName: string): string => {
+  switch (propName) {
+    default:
+      return `new Date('2021-12-31T23:59:59.999Z')`;
+  }
+};
+>>>>>>> 9c1a687 (chore: add mock example)
