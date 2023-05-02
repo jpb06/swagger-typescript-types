@@ -4,11 +4,7 @@ import { WithRequiredProperty } from '../../../types/with-required-property.type
 import { getInlineTypeMock } from './get-inline-type-mock';
 
 describe('getInlineTypeMock function', () => {
-<<<<<<< HEAD
-  it('should return members definition', () => {
-=======
   it('should return members mock', () => {
->>>>>>> 9c1a687 (chore: add mock example)
     const input: WithRequiredProperty<
       ApiTypeDefinition,
       'properties' | 'required'
@@ -37,8 +33,6 @@ describe('getInlineTypeMock function', () => {
 
     expect(result).toBe(members);
   });
-<<<<<<< HEAD
-=======
 
   it('should return members mock with nested object', () => {
     const input: WithRequiredProperty<
@@ -145,5 +139,4 @@ describe('getInlineTypeMock function', () => {
 
     expect(result).toBe(members);
   });
->>>>>>> 9c1a687 (chore: add mock example)
 });
