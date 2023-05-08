@@ -80,10 +80,10 @@ Knowing this, we can add a script to our package.json:
 
 The `generateTypesFromUrl` task takes two arguments:
 
-| name | description                                         | Example                                               |
-| ---- | --------------------------------------------------- | ----------------------------------------------------- |
+| name | description                                         | Example                                    |
+| ---- | --------------------------------------------------- | ------------------------------------------ |
 | u    | The url of the json exposed by the targeted swagger | <https://devfriends-backend.fly.dev/-json> |
-| o    | Where to write our exposed types                    | ./src/api/types                                       |
+| o    | Where to write our exposed types                    | ./src/api/types                            |
 
 Optionally, you can use `-t` flag if you're using `importsNotUsedAsValues` in your tsconfig compiler options. It will generate imports like so:
 

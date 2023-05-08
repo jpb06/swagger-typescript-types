@@ -30,11 +30,17 @@ export interface ApiRouteParameter {
 }
 
 export interface ApiContent {
-  content: {
-    'application/json': {
-      schema: ApiConditionalUnionTypeDefinition;
-    };
-  };
+  content:
+    | {
+        'application/json': {
+          schema: ApiConditionalUnionTypeDefinition;
+        };
+      }
+    | {
+        'multipart/form-data': {
+          schema: ApiConditionalUnionTypeDefinition;
+        };
+      };
 }
 
 export interface ApiSchemas {
@@ -50,6 +56,7 @@ export interface ApiSchemas {
 export type ApiConditionalUnionTypeDefinition =
   | ApiTypeDefinition
   | { oneOf: Array<ApiTypeDefinition> }
+  | { allOf: Array<ApiTypeDefinition> }
   | { payload: ApiTypeDefinition };
 
 export interface ApiTypeDefinition {
@@ -59,4 +66,10 @@ export interface ApiTypeDefinition {
   items?: ApiTypeDefinition;
   required?: Array<string>;
   enum?: Array<string>;
+  example?:
+    | Record<string, unknown>
+    | Array<unknown>
+    | string
+    | number
+    | boolean;
 }

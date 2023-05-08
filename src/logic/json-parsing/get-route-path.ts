@@ -1,9 +1,10 @@
-import { getSchemaName } from './get-schema-name';
 import {
   ApiRouteParameter,
   ApiTypeDefinition,
 } from '../../types/swagger-schema.interfaces';
 import { displayWarning } from '../cli/console/console.messages';
+
+import { getSchemaName } from './get-schema-name';
 
 const getModel = (
   operationId: string,

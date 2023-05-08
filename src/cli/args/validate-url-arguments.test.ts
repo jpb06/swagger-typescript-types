@@ -21,7 +21,9 @@ describe('validateUrlArguments function', () => {
 
     expect(mockExit).toHaveBeenCalled();
 
-    expect(console.error).toHaveBeenCalledWith('Missing required argument: u');
+    expect(console.error).toHaveBeenCalledWith(
+      expect.stringContaining('Missing required argument: u'),
+    );
   });
 
   it('should display an error when no -o option was given', async () => {
@@ -29,7 +31,9 @@ describe('validateUrlArguments function', () => {
 
     expect(mockExit).toHaveBeenCalled();
 
-    expect(console.error).toHaveBeenCalledWith('Missing required argument: o');
+    expect(console.error).toHaveBeenCalledWith(
+      expect.stringContaining('Missing required argument: o'),
+    );
   });
 
   it('should display an error when -u option value is not an url', async () => {

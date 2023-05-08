@@ -1,11 +1,12 @@
 #!/usr/bin/env node
 
-import { validateArguments } from './args/validate-file-arguments';
 import {
   displayError,
   displaySuccess,
 } from '../logic/cli/console/console.messages';
 import { generateTypesFromFile } from '../workflows/generate-types-from-file';
+
+import { validateArguments } from './args/validate-file-arguments';
 
 /* istanbul ignore file */
 

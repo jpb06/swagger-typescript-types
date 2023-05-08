@@ -1,7 +1,8 @@
-import { RouteResponse } from './get-route-responses';
-import { getSchemaName } from './get-schema-name';
 import { ApiTypeDefinition } from '../../types/swagger-schema.interfaces';
 import { displayWarning } from '../cli/console/console.messages';
+
+import { RouteResponse } from './get-route-responses';
+import { getSchemaName } from './get-schema-name';
 
 export const getRouteResponseModel = (
   operationId: string,

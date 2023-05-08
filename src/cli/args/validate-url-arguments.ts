@@ -25,6 +25,7 @@ export const validateArguments = (): GenerateTypesFromUrlArguments => {
     )
     .default('t', false)
     .boolean('t')
+    .locale('en')
     .check((args) => {
       const urlRegex = /^(https?|chrome):\/\/[^\s$.?#].[^\s]*$/;
       if (!urlRegex.test(args.u as string)) {

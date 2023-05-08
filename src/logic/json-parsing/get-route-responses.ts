@@ -1,8 +1,9 @@
-import { getRouteResponseModel } from './get-route-response-model';
 import {
   ApiContent,
   ApiTypeDefinition,
 } from '../../types/swagger-schema.interfaces';
+
+import { getRouteResponseModel } from './get-route-response-model';
 
 export interface RouteResponse {
   statusCode: string;
@@ -22,7 +23,7 @@ export const getRouteResponses = (
   for (const [statusCode, { content }] of Object.entries(responses)) {
     if (
       content &&
-      content['application/json'] &&
+      'application/json' in content &&
       content['application/json'].schema
     ) {
       const schema = content['application/json'].schema;

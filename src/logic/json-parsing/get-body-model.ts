@@ -1,15 +1,27 @@
-import { getSchemaName } from './get-schema-name';
 import {
   ApiContent,
   ApiTypeDefinition,
 } from '../../types/swagger-schema.interfaces';
 import { displayWarning } from '../cli/console/console.messages';
 
+import { getSchemaName } from './get-schema-name';
+
 export interface BodyModel {
   model: string;
   underlyingModel?: string;
   isPrimitiveModel: boolean;
 }
+
+const getSchema = (requestBody: ApiContent): ApiTypeDefinition | undefined => {
+  if ('application/json' in requestBody.content) {
+    return requestBody.content['application/json'].schema as ApiTypeDefinition;
+  }
+  if ('multipart/form-data' in requestBody.content) {
+    return requestBody.content['multipart/form-data']
+      .schema as ApiTypeDefinition;
+  }
+  return undefined;
+};
 
 export const getBodyModel = (
   operationId: string,
@@ -19,8 +31,10 @@ export const getBodyModel = (
     return undefined;
   }
 
-  const schema = requestBody.content['application/json']
-    .schema as ApiTypeDefinition;
+  const schema = getSchema(requestBody);
+  if (!schema) {
+    return undefined;
+  }
 
   if (schema.$ref) {
     return {

@@ -84,7 +84,8 @@ rules:
         - builtin
         - external
         - internal
-        - [parent, sibling, index]
+        - [parent, index]
+        - sibling
       alphabetize:
         order: 'asc'
       pathGroupsExcludedImportTypes:
