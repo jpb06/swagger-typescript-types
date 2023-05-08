@@ -1,9 +1,10 @@
-import { getSchemaName } from './get-schema-name';
 import {
   ApiContent,
   ApiTypeDefinition,
 } from '../../types/swagger-schema.interfaces';
 import { displayWarning } from '../cli/console/console.messages';
+
+import { getSchemaName } from './get-schema-name';
 
 export interface BodyModel {
   model: string;
@@ -16,20 +17,21 @@ const getSchema = (requestBody: ApiContent): ApiTypeDefinition | undefined => {
     return requestBody.content['application/json'].schema as ApiTypeDefinition;
   }
   if ('multipart/form-data' in requestBody.content) {
-    return requestBody.content['multipart/form-data'].schema as ApiTypeDefinition;
+    return requestBody.content['multipart/form-data']
+      .schema as ApiTypeDefinition;
   }
   return undefined;
-}
+};
 
 export const getBodyModel = (
-    operationId: string,
-    requestBody?: ApiContent,
+  operationId: string,
+  requestBody?: ApiContent,
 ): BodyModel | undefined => {
   if (!requestBody) {
     return undefined;
   }
 
-  const schema = getSchema(requestBody)
+  const schema = getSchema(requestBody);
   if (!schema) {
     return undefined;
   }
@@ -60,8 +62,8 @@ export const getBodyModel = (
       }
 
       displayWarning(
-          `Unable to extract type for request body; given array without $ref or type`,
-          operationId,
+        `Unable to extract type for request body; given array without $ref or type`,
+        operationId,
       );
       return undefined;
     }

@@ -1,5 +1,6 @@
-import { getRouteResponses } from './get-route-responses';
 import { ApiContent } from '../../types/swagger-schema.interfaces';
+
+import { getRouteResponses } from './get-route-responses';
 
 describe('getRouteResponses function', () => {
   global.console = { error: jest.fn() } as unknown as Console;

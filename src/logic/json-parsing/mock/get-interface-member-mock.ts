@@ -20,8 +20,6 @@ export const getInterfaceMemberMock = (
     },\n`;
   }
 
-<<<<<<< HEAD
-=======
   if ((property as { allOf: Array<ApiTypeDefinition> }).allOf) {
     return `${prop}: ${
       (property as { allOf: Array<ApiTypeDefinition> }).allOf.map((el) =>
@@ -30,7 +28,6 @@ export const getInterfaceMemberMock = (
     },\n`;
   }
 
->>>>>>> 9c1a687 (chore: add mock example)
   return `${prop}: ${getMemberMock(
     propName,
     property as ApiTypeDefinition,

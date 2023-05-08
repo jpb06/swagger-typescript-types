@@ -1,9 +1,10 @@
-import { BodyModel, getBodyModel } from './get-body-model';
-import { getRouteResponses, RouteResponse } from './get-route-responses';
 import {
   ValidatedOpenaApiSchema,
   ApiRouteParameter,
 } from '../../types/swagger-schema.interfaces';
+
+import { BodyModel, getBodyModel } from './get-body-model';
+import { getRouteResponses, RouteResponse } from './get-route-responses';
 
 export interface Route {
   id: string;

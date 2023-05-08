@@ -1,6 +1,7 @@
-import { getRouteModels } from './get-route-models';
 import { parametersMockData } from '../../tests-related/mock-data/parameters.mock-data';
 import { responsesMockData } from '../../tests-related/mock-data/responses.mock-data';
+
+import { getRouteModels } from './get-route-models';
 
 describe('getRouteModels function', () => {
   it('should return responses models', () => {

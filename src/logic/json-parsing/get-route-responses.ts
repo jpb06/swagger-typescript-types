@@ -1,8 +1,9 @@
-import { getRouteResponseModel } from './get-route-response-model';
 import {
   ApiContent,
   ApiTypeDefinition,
 } from '../../types/swagger-schema.interfaces';
+
+import { getRouteResponseModel } from './get-route-response-model';
 
 export interface RouteResponse {
   statusCode: string;
@@ -12,33 +13,33 @@ export interface RouteResponse {
 }
 
 export const getRouteResponses = (
-    operationId: string,
-    responses: {
-      [key: string]: ApiContent;
-    },
+  operationId: string,
+  responses: {
+    [key: string]: ApiContent;
+  },
 ): Array<RouteResponse> => {
   const routeResponses: Array<RouteResponse> = [];
 
   for (const [statusCode, { content }] of Object.entries(responses)) {
     if (
-        content &&
-        'application/json' in content &&
-        content['application/json'].schema
+      content &&
+      'application/json' in content &&
+      content['application/json'].schema
     ) {
       const schema = content['application/json'].schema;
       if ('oneOf' in schema) {
         routeResponses.push(
-            ...schema.oneOf.map((el) =>
-                getRouteResponseModel(operationId, el, statusCode),
-            ),
+          ...schema.oneOf.map((el) =>
+            getRouteResponseModel(operationId, el, statusCode),
+          ),
         );
       } else {
         routeResponses.push(
-            getRouteResponseModel(
-                operationId,
-                schema as ApiTypeDefinition,
-                statusCode,
-            ),
+          getRouteResponseModel(
+            operationId,
+            schema as ApiTypeDefinition,
+            statusCode,
+          ),
         );
       }
     } else {

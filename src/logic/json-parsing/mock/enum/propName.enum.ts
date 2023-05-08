@@ -12,10 +12,7 @@ export enum PropName {
   beginAt = 'beginAt',
   endAt = 'endAt',
   closedAt = 'closedAt',
-<<<<<<< HEAD
-=======
   acceptedTermsAt = 'acceptedTermsAt',
->>>>>>> 9c1a687 (chore: add mock example)
 
   // String - Other
   email = 'email',

@@ -398,7 +398,7 @@ describe('generateTypesDefinitions function', () => {
 
     expect(writeFile).toHaveBeenCalledTimes(7);
     const rawResult = jest.mocked(writeFile).mock.calls[5][1];
-    const transpilationResult = await transpileRaw(rawResult);
+    const transpilationResult = await transpileRaw(rawResult as string);
     expect(transpilationResult).toHaveLength(0);
   });
 
