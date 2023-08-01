@@ -153,7 +153,21 @@ describe('getInterfaceMemberDefinition function', () => {
     );
   });
 
-  it('should handle enum types', () => {
+  it('should handle enum number types', () => {
+    const result = getInterfaceMemberDefinition(
+      'status',
+      ['status'],
+      {
+        type: 'number',
+        enum: [0, 1, 2],
+      },
+      true,
+    );
+
+    expect(result).toBe(`  status: 0 | 1 | 2;\n`);
+  });
+
+  it('should handle enum string types', () => {
     const result = getInterfaceMemberDefinition(
       'cool',
       ['cool'],
@@ -165,5 +179,19 @@ describe('getInterfaceMemberDefinition function', () => {
     );
 
     expect(result).toBe(`  cool: 'yolo' | 'bro';\n`);
+  });
+
+  it('should handle heterogeneous enum number and string types', () => {
+    const result = getInterfaceMemberDefinition(
+      'status',
+      ['status'],
+      {
+        type: 'string',
+        enum: [0, 'a string value', 2],
+      },
+      true,
+    );
+
+    expect(result).toBe(`  status: 0 | 'a string value' | 2;\n`);
   });
 });
