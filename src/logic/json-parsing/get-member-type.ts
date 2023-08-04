@@ -27,7 +27,15 @@ export const getMemberType = (
     }
 
     if (property.enum) {
-      return property.enum.map((el) => `'${el}'`).join(' | ');
+      return property.enum
+        .map((enumElement) => {
+          if (isNaN(parseInt(enumElement.toString(), 10))) {
+            return `'${enumElement}'`;
+          }
+
+          return enumElement;
+        })
+        .join(' | ');
     }
 
     return mapZodTypes(property.type);
